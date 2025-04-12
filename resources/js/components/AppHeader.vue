@@ -40,7 +40,7 @@ const activeItemStyles = computed(
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Новости',
         href: '/dashboard',
         icon: LayoutGrid,
     },

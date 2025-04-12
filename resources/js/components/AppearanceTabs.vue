@@ -11,9 +11,9 @@ const { class: containerClass = '' } = defineProps<Props>();
 const { appearance, updateAppearance } = useAppearance();
 
 const tabs = [
-    { value: 'light', Icon: Sun, label: 'Light' },
-    { value: 'dark', Icon: Moon, label: 'Dark' },
-    { value: 'system', Icon: Monitor, label: 'System' },
+    { value: 'light', Icon: Sun, label: 'Светлый' },
+    { value: 'dark', Icon: Moon, label: 'Темный' },
+    { value: 'system', Icon: Monitor, label: 'Системный' },
 ] as const;
 </script>
 
