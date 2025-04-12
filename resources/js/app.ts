@@ -7,6 +7,8 @@ import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from 'ziggy-js';
 import { initializeTheme } from './composables/useAppearance';
+import { createPinia } from 'pinia';
+import { createStore } from 'vuex';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -30,6 +32,8 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(createPinia)
+            .use(createStore)
             .component('Toaster', Toaster)
             .mount(el);
     },
