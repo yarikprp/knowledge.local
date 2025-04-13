@@ -9,6 +9,7 @@ import { ZiggyVue } from 'ziggy-js';
 import { initializeTheme } from './composables/useAppearance';
 import { createPinia } from 'pinia';
 import { createStore } from 'vuex';
+import { createVuetify } from 'vuetify';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -29,9 +30,11 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
+        const vuetify = createVuetify();
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(vuetify)
             .use(createPinia)
             .use(createStore)
             .component('Toaster', Toaster)

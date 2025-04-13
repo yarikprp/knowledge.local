@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
+use App\Models\News;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class NewsController extends Controller
 {
@@ -12,7 +14,11 @@ class NewsController extends Controller
      */
     public function index()
     {
-        return News::with(['user', 'type'])->get();
+        $news = News::with(['user', 'type'])->get();
+
+        return Inertia::render('news/News', [
+            'news' => $news
+        ]);
     }
 
     /**
