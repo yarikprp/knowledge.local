@@ -13,7 +13,7 @@ defineProps({
 });
 
 const headers = ref([
-    { title: 'ID', key: 'id' },
+    { title: '#', key: 'id' },
     { title: 'Заголовок', key: 'name' },
     { title: 'Автор', key: 'user' },
     { title: 'Тип', key: 'type' },
