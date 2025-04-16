@@ -26,7 +26,7 @@ const props = defineProps<{
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Список новостей',
+    title: 'Новости',
     href: '/news/news',
   },
 ];

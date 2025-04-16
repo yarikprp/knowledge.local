@@ -16,7 +16,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Новости',
-        href: '/news/news',
+        href: '/news',
         icon: Newspaper,
     },
 ];

@@ -5,11 +5,11 @@ use App\Http\Controllers\News\NewsTypeController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
-    Route::redirect('news', '/news/news');
+    Route::redirect('news', '/news');
 
-    Route::get('/news/newsList', fn () => redirect('/news/news/list'));
+    Route::get('/news/newsList', fn () => redirect('/news/list'));
     // --- News ---
-    Route::prefix('news/news')->name('news.')->group(function () {
+    Route::prefix('news')->name('news.')->group(function () {
         Route::get('/', [NewsController::class, 'index'])->name('index');
         Route::get('/list', [NewsController::class, 'list'])->name('list');
         Route::post('/', [NewsController::class, 'store'])->name('store');

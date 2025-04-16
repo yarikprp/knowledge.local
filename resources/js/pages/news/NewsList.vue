@@ -22,8 +22,8 @@ const headers = ref([
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Новости',
-    href: '/news/news/newsList',
+    title: 'Список новостей',
+    href: '/news/newsList',
   },
 ];
 </script>
