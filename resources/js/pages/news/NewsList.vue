@@ -20,6 +20,14 @@ const headers = ref([
     { title: 'Содержание', key: 'content' },
 ]);
 
+interface NewsItem {
+  id: number;
+  name: string;
+  content: string;
+  user: { name: string };
+  type: { name: string };
+}
+
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Список новостей',
@@ -36,11 +44,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 
             <VDataTable :headers="headers" :items="news" class="elevation-1" item-value="id" no-data-text="Новостей нет">
                 <template #item.user="{ item }">
-                    {{ item.user.name }}
+                    {{ (item as NewsItem).user.name }}
                 </template>
 
                 <template #item.type="{ item }">
-                    {{ item.type.name }}
+                    {{ (item as NewsItem).type.name }}
                 </template>
             </VDataTable>
         </div>
