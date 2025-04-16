@@ -3,22 +3,28 @@
 use App\Http\Controllers\News\NewsController;
 use App\Http\Controllers\News\NewsTypeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
     Route::redirect('news', '/news/news');
 
-    // News
-    Route::get('/news/news', [NewsController::class, 'index'])->name('news.index');
-    Route::get('/news/news', [NewsController::class, 'index'])->name('news.show');
-    Route::post('/news/news', [NewsController::class, 'store'])->name('news.store');
-    Route::put('/news/news', [NewsController::class, 'update'])->name('news.update');
-    Route::delete('/news/news', [NewsController::class, 'destroy'])->name('news.destroy');
+    Route::get('/news/newsList', fn () => redirect('/news/news/list'));
+    // --- News ---
+    Route::prefix('news/news')->name('news.')->group(function () {
+        Route::get('/', [NewsController::class, 'index'])->name('index');
+        Route::get('/list', [NewsController::class, 'list'])->name('list');
+        Route::post('/', [NewsController::class, 'store'])->name('store');
+        Route::put('/{news}', [NewsController::class, 'update'])->name('update');
+        Route::delete('/{news}', [NewsController::class, 'destroy'])->name('destroy');
+        Route::get('/{news}', [NewsController::class, 'show'])->name('show');
+    });
 
-    // News Type
-    Route::get('/news/type', [NewsTypeController::class, 'index'])->name('type.index');
-    Route::get('/news/type', [NewsTypeController::class, 'edit'])->name('type.edit');
-    Route::post('/news/type', [NewsTypeController::class, 'store'])->name('type.store');
-    Route::put('/news/type', [NewsTypeController::class, 'update'])->name('type.update');
-    Route::delete('/news/type', [NewsTypeController::class, 'destroy'])->name('type.destroy');
+    // --- News Types ---
+    Route::prefix('news/type')->name('type.')->group(function () {
+        Route::get('/', [NewsTypeController::class, 'index'])->name('index');
+        Route::get('/{type}/edit', [NewsTypeController::class, 'edit'])->name('edit');
+        Route::post('/', [NewsTypeController::class, 'store'])->name('store');
+        Route::put('/{type}', [NewsTypeController::class, 'update'])->name('update');
+        Route::delete('/{type}', [NewsTypeController::class, 'destroy'])->name('destroy');
+    });
 });
+

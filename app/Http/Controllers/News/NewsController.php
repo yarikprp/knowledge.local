@@ -3,20 +3,31 @@
 namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateNewsRequest;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class NewsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $news = News::with(['user', 'type'])->get();
 
         return Inertia::render('news/News', [
+            'news' => $news
+        ]);
+    }
+
+    public function list(): Response
+    {
+        $news = News::with(['user', 'type'])->get();
+
+        return Inertia::render('news/NewsList', [
             'news' => $news
         ]);
     }
@@ -27,17 +38,22 @@ class NewsController extends Controller
     public function store(CreateNewsRequest $request)
     {
         $validated = $request->validated();
-        $news = News::create($validated);
+        News::create($validated);
 
-        return response()->json($news, 201);
+        return redirect()->route('news.index')
+                         ->with('success', 'Новость успешно добавлена.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(News $news): Response
     {
-        return $news->load(['user', 'type']);
+        $news->load(['user', 'type']);
+
+        return Inertia::render('news/Show', [
+            'news' => $news
+        ]);
     }
 
     /**
@@ -54,7 +70,8 @@ class NewsController extends Controller
 
         $news->update($request->all());
 
-        return response()->json($news);
+        return redirect()->route('news.index')
+                         ->with('success', 'Новость успешно обновлена.');
     }
 
     /**
@@ -64,6 +81,7 @@ class NewsController extends Controller
     {
         $news->delete();
 
-        return response()->noContent();
+        return redirect()->route('news.index')
+                         ->with('success', 'Новость удалена.');
     }
 }

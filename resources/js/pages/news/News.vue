@@ -26,7 +26,7 @@ const props = defineProps<{
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Новости',
+    title: 'Список новостей',
     href: '/news/news',
   },
 ];
@@ -50,7 +50,7 @@ const carouselNews = props.news.slice(0, 5);
           v-for="item in carouselNews"
           :key="item.id"
         >
-          <VCard class="mx-auto my-4" max-width="900">
+          <VCard class="mx-auto my-4" max-width="1800">
             <VCardTitle class="text-center">{{ item.title }}</VCardTitle>
             <VCardSubtitle class="text-center text-grey text--darken-1">
               {{ item.user.name }} • {{ item.type.name }}
@@ -63,7 +63,7 @@ const carouselNews = props.news.slice(0, 5);
           <VCard class="mx-auto my-4" max-width="900">
             <VCardTitle class="text-center">Посмотреть все новости</VCardTitle>
             <VCardText class="text-center">
-              <VBtn href="/news/news" color="primary">Перейти ко всем новостям</VBtn>
+              <VBtn href="/news/newsList" color="primary">Перейти ко всем новостям</VBtn>
             </VCardText>
           </VCard>
         </VCarouselItem>
