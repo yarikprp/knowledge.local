@@ -40,7 +40,7 @@ const carouselNews = props.news.slice(0, 5);
     <div class="d-flex justify-center">
       <VCarousel
         class="w-100"
-        style="max-width: 960px"
+        style="max-width: 100vw"
         hide-delimiter-background
         show-arrows
         prev-icon="mdi-chevron-left"
@@ -50,7 +50,7 @@ const carouselNews = props.news.slice(0, 5);
           v-for="item in carouselNews"
           :key="item.id"
         >
-          <VCard class="mx-auto my-4" max-width="1800">
+          <VCard class="mx-auto my-4" max-width="100%">
             <VCardTitle class="text-center">{{ item.title }}</VCardTitle>
             <VCardSubtitle class="text-center text-grey text--darken-1">
               {{ item.user.name }} • {{ item.type.name }}
@@ -60,7 +60,7 @@ const carouselNews = props.news.slice(0, 5);
         </VCarouselItem>
 
         <VCarouselItem key="view-all">
-          <VCard class="mx-auto my-4" max-width="900">
+          <VCard class="mx-auto my-4" max-width="100%">
             <VCardTitle class="text-center">Посмотреть все новости</VCardTitle>
             <VCardText class="text-center">
               <VBtn href="/news/newsList" color="primary">Перейти ко всем новостям</VBtn>
@@ -71,3 +71,14 @@ const carouselNews = props.news.slice(0, 5);
     </div>
   </AppLayout>
 </template>
+
+<style scoped>
+.v-carousel {
+  width: 100% !important;
+  height: 100vh;
+}
+
+.v-carousel-item {
+  height: 100%;
+}
+</style>
