@@ -17,7 +17,7 @@ const getStoredAppearance = () => {
 };
 
 export function useAppearance() {
-    const theme = useTheme(); // 💥 ВЫЗЫВАЕМ ТУТ — внутри setup!
+    const theme = useTheme();
     const appearance = ref<Appearance>('system');
 
     const updateTheme = (value: Appearance) => {

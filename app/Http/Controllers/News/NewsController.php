@@ -15,9 +15,14 @@ class NewsController extends Controller
     public function index(): Response
     {
         $news = News::with(['user', 'type'])->get();
+        $users = User::select('id', 'name')->get();
+        $newsTypes = NewsType::select('id', 'name')->get();
+
 
         return Inertia::render('news/News', [
-            'news' => $news
+            'news' => $news,
+            'users' => $users,
+            'newsTypes' => $newsTypes,
         ]);
     }
 
