@@ -5,7 +5,7 @@
         </VToolbarTitle>
 
         <VTextField
-            v-if="showSearch"
+            v-if="showSearch && mdAndUp"
             :model-value="modelValue"
             @update:model-value="updateSearch"
             label="Поиск"
@@ -24,19 +24,36 @@
         <v-menu :close-on-content-click="false" transition="slide-y-transition" offset-y bottom>
             <template v-slot:activator="{ props: menuProps }">
                 <v-btn v-bind="menuProps" color="primary" class="white--text ml-1">
-                    <v-icon :left="mdAndUp ? '' : 'mdi-menu'">mdi-dots-vertical</v-icon>
+                    <v-icon :left="mdAndUp">mdi-dots-vertical</v-icon>
                     <span class="d-none d-md-flex">{{ actionsLabel }}</span>
                 </v-btn>
             </template>
 
             <v-list>
                 <v-list-item v-if="hasRefresh" @click="emitRefresh">
-                    <v-list-item-title>Обновить</v-list-item-title>
+                    <v-list-item-title> <v-icon>mdi-sync</v-icon>Обновить</v-list-item-title>
                 </v-list-item>
                 <v-list-item v-if="hasAdd" @click="emitAdd">
-                    <v-list-item-title>Добавить</v-list-item-title>
+                    <v-list-item-title> <v-icon>mdi-plus</v-icon>Добавить</v-list-item-title>
                 </v-list-item>
-                <slot></slot>
+
+                <v-divider v-if="!mdAndUp"></v-divider>
+                <v-list v-if="!mdAndUp">
+                    <v-list-item>
+                        <VTextField
+                            :model-value="modelValue"
+                            @update:model-value="updateSearch"
+                            label="Поиск"
+                            prepend-inner-icon="mdi-magnify"
+                            class="ml-4"
+                            variant="outlined"
+                            clearable
+                            density="compact"
+                            single-line
+                            hide-details
+                        />
+                    </v-list-item>
+                </v-list>
             </v-list>
         </v-menu>
     </VToolbar>
@@ -73,7 +90,7 @@ defineProps({
     },
 });
 
-const emit = defineEmits(['update:modelValue', 'refreshNews', 'addNews']);
+const emit = defineEmits(['update:modelValue', 'refresh', 'add']);
 
 const { mdAndUp } = useDisplay();
 
@@ -82,10 +99,10 @@ const updateSearch = (newSearch: string) => {
 };
 
 const emitRefresh = () => {
-    emit('refreshNews');
+    emit('refresh');
 };
 
 const emitAdd = () => {
-    emit('addNews');
+    emit('add');
 };
 </script>

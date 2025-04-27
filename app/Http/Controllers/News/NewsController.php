@@ -4,6 +4,8 @@ namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
+use App\Models\User;
+use App\Models\NewsType;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -15,14 +17,9 @@ class NewsController extends Controller
     public function index(): Response
     {
         $news = News::with(['user', 'type'])->get();
-        $users = User::select('id', 'name')->get();
-        $newsTypes = NewsType::select('id', 'name')->get();
-
 
         return Inertia::render('news/News', [
             'news' => $news,
-            'users' => $users,
-            'newsTypes' => $newsTypes,
         ]);
     }
 
@@ -32,9 +29,13 @@ class NewsController extends Controller
     public function list(): Response
     {
         $news = News::with(['user', 'type'])->get();
+        $users = User::select('id', 'name')->get();
+        $newsTypes = NewsType::select('id', 'name')->get();
 
         return Inertia::render('news/NewsList', [
-            'news' => $news
+            'news' => $news,
+            'users' => $users,
+            'newsTypes' => $newsTypes,
         ]);
     }
 
@@ -44,7 +45,7 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'content' => 'required|string',
             'user_id' => 'required|exists:users,id',
             'news_type_id' => 'required|exists:news_types,id',
@@ -61,7 +62,7 @@ class NewsController extends Controller
     public function update(Request $request, News $news)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'content' => 'required|string',
             'user_id' => 'required|exists:users,id',
             'news_type_id' => 'required|exists:news_types,id',

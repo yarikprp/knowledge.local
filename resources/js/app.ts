@@ -9,6 +9,7 @@ import { ZiggyVue } from 'ziggy-js';
 import { createPinia } from 'pinia';
 import { createStore } from 'vuex';
 import { createVuetify } from 'vuetify';
+import '@mdi/font/css/materialdesignicons.css';
 import { ru } from 'vuetify/locale';
 
 // Extend ImportMeta interface for Vite...
@@ -34,6 +35,9 @@ createInertiaApp({
             locale: {
               locale: 'ru',
               messages: { ru },
+            },
+            icons: {
+                iconfont: 'mdi',
             },
           });
         createApp({ render: () => h(App, props) })

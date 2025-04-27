@@ -2,24 +2,37 @@
     <Head title="Новости" />
     <AppLayout :breadcrumbs="[{ title: 'Список новостей', href: '/news/newsList' }]">
         <div class="pa-4">
-            <ToolbarDataTable title="Список новостей" :showSearch="true" v-model="search" @refreshNews="refreshNews" @addNews="addNews" />
+            <ToolbarDataTable title="Список новостей" :showSearch="true" v-model="search" @refresh="refreshItems" @add="addItem" />
 
             <VDataTable :headers="headers" :items="news" :search="search" item-value="id" no-data-text="Новостей нет">
-                <template v-slot:item.user="{ item }">
-                    {{ item.user.name }}
+                <template v-slot:[`header.actions`]>
+                    <v-icon right>mdi-dots-circle</v-icon>
+                </template>
+                <template v-slot:[`item.actions`]="{ item }">
+                    <ActionMenu
+                        :buttons="{ isEdit: true, isDelete: true, isGoToView: true }"
+                        @edit="updateItem(item as Item)"
+                        @delete="deleteItem(item as Item)"
+                        @goToView="viewItem(item as Item)"
+                    />
                 </template>
 
-                <template v-slot:item.type="{ item }">
-                    {{ item.type.name }}
+                <template v-slot:[`item.user`]="{ item }">
+                    {{ (item as Item).user.name }}
+                </template>
+
+                <template v-slot:[`item.type`]="{ item }">
+                    {{ (item as Item).type.name }}
                 </template>
             </VDataTable>
 
-            <NewsModal v-model="dialog" :newsItem="selectedNews" :users="props.users" :newsTypes="props.newsTypes" @saved="refreshNews" />
+            <NewsModal v-model="dialog" :newsItem="selected" :users="props.users" :newsTypes="props.newsTypes" @saved="refreshItems" />
         </div>
     </AppLayout>
 </template>
 
 <script setup lang="ts">
+import ActionMenu from '@/components/General/ActionMenu.vue';
 import ToolbarDataTable from '@/components/General/ToolbarDataTable.vue';
 import NewsModal from '@/components/Modal/News/NewsModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -42,10 +55,11 @@ const props = defineProps({
 });
 
 const search = ref('');
-const selectedNews = ref(null);
+const selected = ref<Item | null>(null);
 const dialog = ref(false);
 
 const headers = ref([
+    { title: 'Действия', key: 'actions', sortable: false },
     { title: '#', key: 'id' },
     { title: 'Заголовок', key: 'name' },
     { title: 'Автор', key: 'user' },
@@ -53,12 +67,43 @@ const headers = ref([
     { title: 'Содержание', key: 'content' },
 ]);
 
-const refreshNews = () => {
+interface Item {
+    id: number;
+    name: string;
+    content: string;
+    user: {
+        id: number;
+        name: string;
+    };
+    type: {
+        id: number;
+        name: string;
+    };
+}
+
+
+const refreshItems = () => {
     window.location.reload();
 };
 
-const addNews = () => {
-    selectedNews.value = null;
+const addItem = () => {
+    selected.value = null;
     dialog.value = true;
+};
+
+const updateItem = (item: Item) => {
+    selected.value = item;
+    dialog.value = true;
+};
+
+const deleteItem = (item: Item) => {
+    if (confirm(`Удалить новость "${item.name}"?`)) {
+        console.log('Удаление новости:', item.id);
+        refreshItems();
+    }
+};
+
+const viewItem = (item: Item) => {
+    console.log('Просмотр новости:', item.id);
 };
 </script>
