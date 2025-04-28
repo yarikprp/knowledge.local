@@ -4,10 +4,11 @@
         <div class="pa-4">
             <ToolbarDataTable title="Список новостей" :showSearch="true" v-model="search" @refresh="refreshItems" @add="addItem" />
 
-            <VDataTable :headers="headers" :items="news" :search="search" item-value="id" no-data-text="Новостей нет">
+            <VDataTable :headers="headers" :items="news" :search="search" item-value="id" no-data-text="Новостей нет" :loading="isLoading">
                 <template v-slot:[`header.actions`]>
                     <v-icon right>mdi-dots-circle</v-icon>
                 </template>
+
                 <template v-slot:[`item.actions`]="{ item }">
                     <ActionMenu
                         :buttons="{ isEdit: true, isDelete: true, isGoToView: true }"
@@ -24,6 +25,10 @@
                 <template v-slot:[`item.type`]="{ item }">
                     {{ (item as Item).type.name }}
                 </template>
+
+                <template #loading>
+                    <v-skeleton-loader v-for="n in 5" :key="n" type="table-row" class="mx-2" />
+                </template>
             </VDataTable>
 
             <NewsModal v-model="dialog" :newsItem="selected" :users="props.users" :newsTypes="props.newsTypes" @saved="refreshItems" />
@@ -36,7 +41,7 @@ import ActionMenu from '@/components/General/ActionMenu.vue';
 import ToolbarDataTable from '@/components/General/ToolbarDataTable.vue';
 import NewsModal from '@/components/Modal/News/NewsModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { defineProps, ref } from 'vue';
 
 const props = defineProps({
@@ -57,6 +62,7 @@ const props = defineProps({
 const search = ref('');
 const selected = ref<Item | null>(null);
 const dialog = ref(false);
+const isLoading = ref(false);
 
 const headers = ref([
     { title: 'Действия', key: 'actions', sortable: false },
@@ -81,9 +87,14 @@ interface Item {
     };
 }
 
-
 const refreshItems = () => {
-    window.location.reload();
+    isLoading.value = true;
+    router.reload({
+        only: ['news'],
+        onFinish: () => {
+            isLoading.value = false;
+        },
+    });
 };
 
 const addItem = () => {
