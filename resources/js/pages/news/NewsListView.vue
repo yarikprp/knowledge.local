@@ -1,23 +1,21 @@
 <template>
     <Head title="Новости" />
-    <AppLayout :breadcrumbs="[{ title: 'Список новостей', href: '/news/newsList' }]">
+    <AppLayout :breadcrumbs="[{ title: 'Список новостей', href: '/news/listView' }]">
         <div class="pa-4">
             <ToolbarDataTable
                 title="Список новостей"
                 :isParentLoading="isLoading"
                 :showSearch="true"
+                :hasAdd="false"
                 v-model="search"
                 @refresh="refreshItems"
-                @add="addItem"
                 @back="goBack"
             />
 
             <VDataTable :headers="headers" :items="news" :search="search" item-value="id" no-data-text="Новостей нет" :loading="isLoading">
                 <template v-slot:[`item.actions`]="{ item }">
                     <ActionMenu
-                        :buttons="{ isEdit: true, isDelete: true, isGoToView: true }"
-                        @edit="updateItem(item as Item)"
-                        @delete="deleteItem(item as Item)"
+                        :buttons="{ isEdit: false, isDelete: false, isGoToView: true }"
                         @goToView="goToView(item as Item)"
                     />
                 </template>
@@ -34,8 +32,6 @@
                     <v-skeleton-loader v-for="n in 5" :key="n" type="table-row" class="mx-2" />
                 </template>
             </VDataTable>
-
-            <NewsModal v-model="dialog" :newsItem="selected" :users="props.users" :newsTypes="props.newsTypes" @saved="refreshItems" />
         </div>
     </AppLayout>
 </template>
@@ -43,13 +39,11 @@
 <script setup lang="ts">
 import ActionMenu from '@/components/General/ActionMenu.vue';
 import ToolbarDataTable from '@/components/General/ToolbarDataTable.vue';
-import NewsModal from '@/components/Modal/News/NewsModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Inertia } from '@inertiajs/inertia';
 import { Head, router } from '@inertiajs/vue3';
 import { defineProps, ref } from 'vue';
 
-const props = defineProps({
+defineProps({
     news: {
         type: Array,
         required: true,
@@ -65,8 +59,6 @@ const props = defineProps({
 });
 
 const search = ref('');
-const selected = ref<Item | null>(null);
-const dialog = ref(false);
 const isLoading = ref(false);
 
 const headers = ref([
@@ -100,30 +92,6 @@ const refreshItems = () => {
             isLoading.value = false;
         },
     });
-};
-
-const addItem = () => {
-    selected.value = null;
-    dialog.value = true;
-};
-
-const updateItem = (item: Item) => {
-    selected.value = item;
-    dialog.value = true;
-};
-
-const deleteItem = (item: Item) => {
-    if (confirm(`Удалить новость "${item.name}"?`)) {
-        Inertia.delete(`/news/${item.id}`, {
-            onSuccess: () => {
-                alert('Новость успешно удалена.');
-                refreshItems();
-            },
-            onError: () => {
-                alert('Ошибка при удалении новости.');
-            },
-        });
-    }
 };
 
 const goToView = (item: Item) => {

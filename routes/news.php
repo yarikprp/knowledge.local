@@ -8,12 +8,14 @@ Route::middleware('auth')->group(function () {
     Route::redirect('news', '/news');
 
     Route::get('/news/newsList', fn () => redirect('/news/list'));
+    Route::get('/news/listView', fn () => redirect('/news/listView'));
     Route::get('/news/type', fn () => redirect('/news/type/index'));
 
     // --- News ---
     Route::prefix('news')->name('news.')->group(function () {
         Route::get('/', [NewsController::class, 'index'])->name('index');
         Route::get('/list', [NewsController::class, 'list'])->name('list');
+        Route::get('/listView', [NewsController::class, 'listView'])->name('listView');
         Route::post('/', [NewsController::class, 'store'])->name('store');
         Route::put('/{news}', [NewsController::class, 'update'])->name('update');
         Route::delete('/{news}', [NewsController::class, 'destroy'])->name('destroy');

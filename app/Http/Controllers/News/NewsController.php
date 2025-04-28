@@ -41,6 +41,22 @@ class NewsController extends Controller
     }
 
     /**
+     * Display a list of the news view.
+     */
+    public function listView(): Response
+    {
+        $news = News::with(['user', 'type'])->get();
+        $users = User::select('id', 'name')->get();
+        $newsTypes = NewsType::select('id', 'name')->get();
+
+        return Inertia::render('news/NewsListView', [
+            'news' => $news,
+            'users' => $users,
+            'newsTypes' => $newsTypes,
+        ]);
+    }
+
+    /**
      * Store a newly created news in the database.
      */
     public function store(Request $request)
