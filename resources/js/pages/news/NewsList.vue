@@ -2,7 +2,7 @@
     <Head title="Новости" />
     <AppLayout :breadcrumbs="[{ title: 'Список новостей', href: '/news/newsList' }]">
         <div class="pa-4">
-            <ToolbarDataTable title="Список новостей" :showSearch="true" v-model="search" @refresh="refreshItems" @add="addItem" />
+            <ToolbarDataTable title="Список новостей" :isParentLoading="isLoading" :showSearch="true" v-model="search" @refresh="refreshItems" @add="addItem" />
 
             <VDataTable :headers="headers" :items="news" :search="search" item-value="id" no-data-text="Новостей нет" :loading="isLoading">
 
