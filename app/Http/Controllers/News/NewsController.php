@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\NewsType;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
@@ -52,8 +53,6 @@ class NewsController extends Controller
         ]);
 
         News::create($validated);
-
-        return redirect()->route('news.index')->with('success', 'Новость успешно добавлена.');
     }
 
     /**
@@ -69,8 +68,6 @@ class NewsController extends Controller
         ]);
 
         $news->update($validated);
-
-        return redirect()->route('news.index')->with('success', 'Новость успешно обновлена.');
     }
 
     /**
@@ -79,8 +76,6 @@ class NewsController extends Controller
     public function destroy(News $news)
     {
         $news->delete();
-
-        return redirect()->route('news.index')->with('success', 'Новость удалена.');
     }
 
     /**

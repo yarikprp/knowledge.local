@@ -5,9 +5,6 @@
             <ToolbarDataTable title="Список новостей" :showSearch="true" v-model="search" @refresh="refreshItems" @add="addItem" />
 
             <VDataTable :headers="headers" :items="news" :search="search" item-value="id" no-data-text="Новостей нет" :loading="isLoading">
-                <template v-slot:[`header.actions`]>
-                    <v-icon right>mdi-dots-circle</v-icon>
-                </template>
 
                 <template v-slot:[`item.actions`]="{ item }">
                     <ActionMenu
@@ -42,6 +39,7 @@ import ToolbarDataTable from '@/components/General/ToolbarDataTable.vue';
 import NewsModal from '@/components/Modal/News/NewsModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
+import { Inertia } from '@inertiajs/inertia';
 import { defineProps, ref } from 'vue';
 
 const props = defineProps({
@@ -109,8 +107,15 @@ const updateItem = (item: Item) => {
 
 const deleteItem = (item: Item) => {
     if (confirm(`Удалить новость "${item.name}"?`)) {
-        console.log('Удаление новости:', item.id);
-        refreshItems();
+        Inertia.delete(`/news/${item.id}`, {
+            onSuccess: () => {
+                alert('Новость успешно удалена.');
+                refreshItems();
+            },
+            onError: () => {
+                alert('Ошибка при удалении новости.');
+            },
+        });
     }
 };
 
