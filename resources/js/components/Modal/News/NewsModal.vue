@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { router, useForm } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { defineEmits, defineProps, ref, watch, computed } from 'vue';
 
 interface NewsItem {

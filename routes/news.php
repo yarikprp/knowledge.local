@@ -8,6 +8,8 @@ Route::middleware('auth')->group(function () {
     Route::redirect('news', '/news');
 
     Route::get('/news/newsList', fn () => redirect('/news/list'));
+    Route::get('/news/type', fn () => redirect('/news/type/index'));
+
     // --- News ---
     Route::prefix('news')->name('news.')->group(function () {
         Route::get('/', [NewsController::class, 'index'])->name('index');
@@ -21,10 +23,9 @@ Route::middleware('auth')->group(function () {
     // --- News Types ---
     Route::prefix('news/type')->name('type.')->group(function () {
         Route::get('/', [NewsTypeController::class, 'index'])->name('index');
-        Route::get('/{type}/edit', [NewsTypeController::class, 'edit'])->name('edit');
         Route::post('/', [NewsTypeController::class, 'store'])->name('store');
-        Route::put('/{type}', [NewsTypeController::class, 'update'])->name('update');
-        Route::delete('/{type}', [NewsTypeController::class, 'destroy'])->name('destroy');
+        Route::put('/{newsType}', [NewsTypeController::class, 'update'])->name('update');
+        Route::delete('/{newsType}', [NewsTypeController::class, 'destroy'])->name('destroy');
     });
 });
 

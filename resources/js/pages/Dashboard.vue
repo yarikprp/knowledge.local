@@ -22,7 +22,14 @@ const breadcrumbs: BreadcrumbItem[] = [
         href="/news/newsList"
         prepend-icon="mdi-newspaper"
       >
-        Перейти к списку новостей
+        Список новостей
+      </VBtn>
+      <VBtn
+        color="primary"
+        href="/news/type"
+        prepend-icon="mdi-newspaper"
+      >
+        Список типов новостей
       </VBtn>
     </div>
   </AppLayout>

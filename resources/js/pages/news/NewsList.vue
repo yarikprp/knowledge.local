@@ -8,10 +8,9 @@
 
                 <template v-slot:[`item.actions`]="{ item }">
                     <ActionMenu
-                        :buttons="{ isEdit: true, isDelete: true, isGoToView: true }"
+                        :buttons="{ isEdit: true, isDelete: true, isGoToView: false }"
                         @edit="updateItem(item as Item)"
                         @delete="deleteItem(item as Item)"
-                        @goToView="viewItem(item as Item)"
                     />
                 </template>
 
@@ -117,9 +116,5 @@ const deleteItem = (item: Item) => {
             },
         });
     }
-};
-
-const viewItem = (item: Item) => {
-    console.log('Просмотр новости:', item.id);
 };
 </script>

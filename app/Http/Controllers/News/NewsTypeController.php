@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateNewsTypeRequest;
 use App\Models\NewsType;
+use Inertia\Inertia;
+use Inertia\Response;
 use Illuminate\Http\Request;
 
 class NewsTypeController extends Controller
@@ -14,18 +15,23 @@ class NewsTypeController extends Controller
      */
     public function index()
     {
-        return NewsType::all();
+        $newsType = NewsType::all();
+
+        return Inertia::render('news/NewsTypeList', [
+            'newsType' => $newsType,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateNewsTypeRequest $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated();
-        $newsType = NewsType::create($validated);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        return response()->json($newsType, 201);
+        NewsType::create($validated);
     }
 
     /**
@@ -33,13 +39,11 @@ class NewsTypeController extends Controller
      */
     public function update(Request $request, NewsType $newsType)
     {
-        $request->validate([
-            'name' => 'string|max:255',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
         ]);
 
-        $newsType->update($request->all());
-
-        return response()->json($newsType);
+        $newsType->update($validated);
     }
 
     /**
@@ -48,7 +52,5 @@ class NewsTypeController extends Controller
     public function destroy(NewsType $newsType)
     {
         $newsType->delete();
-
-        return response()->noContent();
     }
 }
