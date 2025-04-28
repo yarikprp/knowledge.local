@@ -2,10 +2,17 @@
     <Head title="Новости" />
     <AppLayout :breadcrumbs="[{ title: 'Список новостей', href: '/news/newsList' }]">
         <div class="pa-4">
-            <ToolbarDataTable title="Список новостей" :isParentLoading="isLoading" :showSearch="true" v-model="search" @refresh="refreshItems" @add="addItem" />
+            <ToolbarDataTable
+                title="Список новостей"
+                :isParentLoading="isLoading"
+                :showSearch="true"
+                v-model="search"
+                @refresh="refreshItems"
+                @add="addItem"
+                @back="goBack"
+            />
 
             <VDataTable :headers="headers" :items="news" :search="search" item-value="id" no-data-text="Новостей нет" :loading="isLoading">
-
                 <template v-slot:[`item.actions`]="{ item }">
                     <ActionMenu
                         :buttons="{ isEdit: true, isDelete: true, isGoToView: false }"
@@ -37,8 +44,8 @@ import ActionMenu from '@/components/General/ActionMenu.vue';
 import ToolbarDataTable from '@/components/General/ToolbarDataTable.vue';
 import NewsModal from '@/components/Modal/News/NewsModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
+import { Head, router } from '@inertiajs/vue3';
 import { defineProps, ref } from 'vue';
 
 const props = defineProps({
@@ -116,5 +123,9 @@ const deleteItem = (item: Item) => {
             },
         });
     }
+};
+
+const goBack = () => {
+    window.history.back();
 };
 </script>

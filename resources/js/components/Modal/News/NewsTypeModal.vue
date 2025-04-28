@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { defineEmits, defineProps, ref, watch, computed } from 'vue';
+import { computed, defineEmits, defineProps, ref, watch } from 'vue';
 
 interface NewsTypeItemProps {
     id: number;
@@ -73,7 +73,7 @@ const submit = () => {
             },
             onError: () => {
                 isLoading.value = false;
-            }
+            },
         });
     } else {
         form.post(route('type.store'), {
@@ -84,12 +84,11 @@ const submit = () => {
             },
             onError: () => {
                 isLoading.value = false;
-            }
+            },
         });
     }
 };
 </script>
-
 
 <template>
     <v-dialog v-model="dialog" max-width="600px" persistent>

@@ -1,6 +1,10 @@
 <template>
     <VToolbar>
-        <VToolbarTitle>
+        <v-btn icon @click="emitBack">
+            <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+
+        <VToolbarTitle v-if="mdAndUp">
             <span class="text-h6">{{ title }}</span>
         </VToolbarTitle>
 
@@ -32,7 +36,7 @@
 
             <v-list>
                 <v-list-item v-if="hasRefresh" :loading="isParentLoading" :disabled="isParentLoading" @click="emitRefresh">
-                    <v-list-item-title :loading="isParentLoading" :disabled="isParentLoading"> <v-icon>mdi-sync</v-icon>Обновить</v-list-item-title>
+                    <v-list-item-title> <v-icon>mdi-sync</v-icon>Обновить</v-list-item-title>
                 </v-list-item>
                 <v-list-item v-if="hasAdd" @click="emitAdd">
                     <v-list-item-title> <v-icon>mdi-plus</v-icon>Добавить</v-list-item-title>
@@ -97,7 +101,7 @@ defineProps({
     },
 });
 
-const emit = defineEmits(['update:modelValue', 'refresh', 'add']);
+const emit = defineEmits(['update:modelValue', 'refresh', 'add', 'back']);
 
 const { mdAndUp } = useDisplay();
 
@@ -111,5 +115,9 @@ const emitRefresh = () => {
 
 const emitAdd = () => {
     emit('add');
+};
+
+const emitBack = () => {
+    emit('back');
 };
 </script>

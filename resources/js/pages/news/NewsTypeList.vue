@@ -2,10 +2,17 @@
     <Head title="Список типов новостей" />
     <AppLayout :breadcrumbs="[{ title: 'Список типов новостей', href: '/news/type' }]">
         <div class="pa-4">
-            <ToolbarDataTable title="Список типов новостей" :isParentLoading="isLoading" :showSearch="true" v-model="search" @refresh="refreshItems" @add="addItem" />
+            <ToolbarDataTable
+                title="Список типов новостей"
+                :isParentLoading="isLoading"
+                :showSearch="true"
+                v-model="search"
+                @refresh="refreshItems"
+                @add="addItem"
+                @back="goBack"
+            />
 
             <VDataTable :headers="headers" :items="newsType" :search="search" item-value="id" no-data-text="Новостей нет" :loading="isLoading">
-
                 <template v-slot:[`item.actions`]="{ item }">
                     <ActionMenu
                         :buttons="{ isEdit: true, isDelete: true, isGoToView: false }"
@@ -22,23 +29,23 @@
             <NewsTypeModal v-model="dialog" :NewsTypeItem="selected" @saved="refreshItems" />
         </div>
     </AppLayout>
-  </template>
+</template>
 
-  <script setup lang="ts">
-  import ActionMenu from '@/components/General/ActionMenu.vue';
-  import ToolbarDataTable from '@/components/General/ToolbarDataTable.vue';
-  import NewsTypeModal from '@/components/Modal/News/NewsTypeModal.vue';
-  import AppLayout from '@/layouts/AppLayout.vue';
-  import { Head, router } from '@inertiajs/vue3';
-  import { Inertia } from '@inertiajs/inertia';
-  import { defineProps, ref } from 'vue';
+<script setup lang="ts">
+import ActionMenu from '@/components/General/ActionMenu.vue';
+import ToolbarDataTable from '@/components/General/ToolbarDataTable.vue';
+import NewsTypeModal from '@/components/Modal/News/NewsTypeModal.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { Inertia } from '@inertiajs/inertia';
+import { Head, router } from '@inertiajs/vue3';
+import { defineProps, ref } from 'vue';
 
 defineProps({
     newsType: {
         type: Array,
         required: true,
     },
-  });
+});
 
 const search = ref('');
 const selected = ref<Item | null>(null);
@@ -89,4 +96,8 @@ const deleteItem = (item: Item) => {
         });
     }
 };
-  </script>
+
+const goBack = () => {
+    window.history.back();
+};
+</script>
