@@ -1,33 +1,12 @@
 <script setup lang="ts">
 import ActionMenu from '@/components/General/ActionMenu.vue';
 import ToolbarDataTable from '@/components/General/ToolbarDataTable.vue';
+import UserModal from '@/components/Modal/User/UserModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { formatDate } from '@/utils/formatDate';
 import { Inertia } from '@inertiajs/inertia';
 import { Head, router } from '@inertiajs/vue3';
 import { defineProps, ref } from 'vue';
-import { formatDate } from '@/utils/formatDate';
-
-defineProps({
-    user: {
-        type: Array,
-        required: true,
-    },
-});
-
-const search = ref('');
-const selected = ref<Item | null>(null);
-const dialog = ref(false);
-const isLoading = ref(false);
-
-const headers = ref([
-    { title: 'Действия', key: 'actions', sortable: false },
-    { title: '#', key: 'id' },
-    { title: 'ФИО', key: 'name' },
-    { title: 'Почта', key: 'email' },
-    { title: 'Верификация', key: 'email_verified_at' },
-    { title: 'Создан', key: 'created_at' },
-    { title: 'Обновлен', key: 'updated_at' },
-]);
 
 interface Item {
     id: number;
@@ -37,6 +16,25 @@ interface Item {
     created_at: string;
     updated_at: string;
 }
+
+const props = defineProps<{
+    user: Item[];
+}>();
+
+const search = ref('');
+const selected = ref<Item | null>(null);
+const dialog = ref(false);
+const isLoading = ref(false);
+
+const headers = [
+    { title: 'Действия', key: 'actions', sortable: false },
+    { title: '#', key: 'id' },
+    { title: 'ФИО', key: 'name' },
+    { title: 'Почта', key: 'email' },
+    { title: 'Верификация', key: 'email_verified_at' },
+    { title: 'Создан', key: 'created_at' },
+    { title: 'Обновлен', key: 'updated_at' },
+];
 
 const refreshItems = () => {
     isLoading.value = true;
@@ -59,14 +57,14 @@ const updateItem = (item: Item) => {
 };
 
 const deleteItem = (item: Item) => {
-    if (confirm(`Удалить новость "${item.name}"?`)) {
+    if (confirm(`Удалить пользователя "${item.name}"?`)) {
         Inertia.delete(`/user/${item.id}`, {
             onSuccess: () => {
-                alert('Новость успешно удалена.');
+                alert('Пользователь успешно удалён.');
                 refreshItems();
             },
             onError: () => {
-                alert('Ошибка при удалении новости.');
+                alert('Ошибка при удалении пользователя.');
             },
         });
     }
@@ -95,13 +93,13 @@ const goBack = () => {
                 @back="goBack"
             />
 
-            <VDataTable :headers="headers" :items="user" :search="search" item-value="id" no-data-text="Нет данных" :loading="isLoading">
+            <VDataTable :headers="headers" :items="props.user" :search="search" item-value="id" no-data-text="Нет данных" :loading="isLoading">
                 <template v-slot:[`item.actions`]="{ item }">
                     <ActionMenu
                         :buttons="{ isEdit: true, isDelete: true, isGoToView: true }"
-                        @edit="updateItem(item as Item)"
-                        @delete="deleteItem(item as Item)"
-                        @goToView="goToView(item as Item)"
+                        @edit="updateItem(item)"
+                        @delete="deleteItem(item)"
+                        @goToView="goToView(item)"
                     />
                 </template>
 
@@ -119,6 +117,8 @@ const goBack = () => {
                     <v-skeleton-loader v-for="n in 5" :key="n" type="table-row" class="mx-2" />
                 </template>
             </VDataTable>
+
+            <UserModal v-model="dialog" :user="selected ?? undefined" @saved="refreshItems" />
         </div>
     </AppLayout>
 </template>
