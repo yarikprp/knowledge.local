@@ -20,16 +20,23 @@ const breadcrumbs: BreadcrumbItem[] = [
       <VBtn
         color="primary"
         href="/news/newsList"
-        prepend-icon="mdi-newspaper"
+        prepend-icon="mdi-format-list-bulleted"
       >
         Список новостей
       </VBtn>
       <VBtn
         color="primary"
         href="/news/type"
-        prepend-icon="mdi-newspaper"
+        prepend-icon="mdi-tag"
       >
         Список типов новостей
+      </VBtn>
+      <VBtn
+        color="primary"
+        href="/user"
+        prepend-icon="mdi-account-group"
+      >
+        Список пользователей
       </VBtn>
     </div>
   </AppLayout>
