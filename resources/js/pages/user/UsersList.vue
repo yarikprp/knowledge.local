@@ -15,10 +15,12 @@ interface Item {
     email_verified_at: string;
     created_at: string;
     updated_at: string;
+    roles: { name: string }[];
 }
 
 const props = defineProps<{
     user: Item[];
+    roles: { id: number; name: string }[];
 }>();
 
 const search = ref('');
@@ -31,6 +33,7 @@ const headers = [
     { title: '#', key: 'id' },
     { title: 'ФИО', key: 'name' },
     { title: 'Почта', key: 'email' },
+    { title: 'Роли', key: 'roles' },
     { title: 'Верификация', key: 'email_verified_at' },
     { title: 'Создан', key: 'created_at' },
     { title: 'Обновлен', key: 'updated_at' },
@@ -104,7 +107,7 @@ const goBack = () => {
                 </template>
 
                 <template v-slot:[`item.email_verified_at`]="{ item }">
-                    <span>{{ formatDate(item.email_verified_at) }}</span>
+                    <span>{{ item.email_verified_at ? 'Подтвержден' : 'Не подтвержден' }}</span>
                 </template>
                 <template v-slot:[`item.created_at`]="{ item }">
                     <span>{{ formatDate(item.created_at) }}</span>
@@ -112,13 +115,16 @@ const goBack = () => {
                 <template v-slot:[`item.updated_at`]="{ item }">
                     <span>{{ formatDate(item.updated_at) }}</span>
                 </template>
+                <template v-slot:[`item.roles`]="{ item }">
+                    <span>{{ item.roles?.map((role) => role.name).join(', ') || 'Нет ролей' }}</span>
+                </template>
 
                 <template #loading>
                     <v-skeleton-loader v-for="n in 5" :key="n" type="table-row" class="mx-2" />
                 </template>
             </VDataTable>
 
-            <UserModal v-model="dialog" :user="selected ?? undefined" @saved="refreshItems" />
+            <UserModal v-model="dialog" :user="selected ?? undefined" :roles="props.roles" @saved="refreshItems" />
         </div>
     </AppLayout>
 </template>

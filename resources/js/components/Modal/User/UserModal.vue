@@ -8,11 +8,13 @@ interface RegisterForm {
     email: string;
     password?: string;
     password_confirmation?: string;
+    role_id?: number; // Добавляем роль
 }
 
 const props = defineProps<{
     modelValue: boolean;
     user?: RegisterForm;
+    roles: { id: number; name: string }[]; // Роли
 }>();
 
 const emit = defineEmits(['update:modelValue', 'saved']);
@@ -54,6 +56,7 @@ const form = useForm<RegisterForm>({
     email: props.user?.email ?? '',
     password: '',
     password_confirmation: '',
+    role_id: props.user?.role_id ?? null, // Роль
 });
 
 watch(
@@ -68,6 +71,7 @@ watch(
             form.email = props.user.email;
             form.password = '';
             form.password_confirmation = '';
+            form.role_id = props.user.role_id ?? null; // Загружаем роль
         }
     },
 );
@@ -105,6 +109,10 @@ const validationErrors = computed(() => {
 
     if (form.password && form.password !== form.password_confirmation) {
         errors.password_confirmation = 'Пароли не совпадают';
+    }
+
+    if (!form.role_id) {
+        errors.role_id = 'Роль обязательна';
     }
 
     return errors;
@@ -168,6 +176,18 @@ const submit = () => {
                     :disabled="isLoading"
                     label="Email"
                     :error-messages="form.errors.email"
+                    required
+                />
+
+                <v-select
+                    v-model="form.role_id"
+                    :items="props.roles"
+                    item-value="id"
+                    item-title="name"
+                    label="Роль"
+                    :loading="isLoading"
+                    :disabled="isLoading"
+                    :error-messages="form.errors.role_id"
                     required
                 />
 
