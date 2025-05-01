@@ -6,7 +6,7 @@
             Ой! Похоже, мы не можем найти то, что вы ищете. Возможно, страница была перемещена или удалена.
         </p>
         <div class="d-flex flex-wrap justify-center gap-4">
-            <Link href="/" class="text-decoration-none">
+            <Link href="/dashboard" class="text-decoration-none">
                 <v-btn color="primary" variant="outlined" class="ma-2">
                     <v-icon icon="mdi-home" start />
                     На главную

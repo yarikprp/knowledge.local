@@ -2,163 +2,72 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { VBtn, VCard, VCardTitle, VCardText } from 'vuetify/components';
+import { ref } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Админ',
+    title: 'Ознакомление',
     href: '/dashboard',
   },
 ];
+
+const dialog = ref(false);
+
+const openSupportDialog = () => {
+  dialog.value = true;
+};
 </script>
 
 <template>
-  <Head title="Админ" />
+  <Head title="Ознакомление" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="pa-6">
-      <VCard class="mb-6" outlined>
-        <VCardTitle class="headline">Управление</VCardTitle>
-        <VCardText>
-          <div class="d-flex flex-column gap-4 mt-4">
-            <VBtn
-              color="primary"
-              href="/news/newsList"
-              prepend-icon="mdi-format-list-bulleted"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Новости
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/news/type"
-              prepend-icon="mdi-tag"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Типы новостей
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/user"
-              prepend-icon="mdi-account-group"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Пользователи
-            </VBtn>
-          </div>
-        </VCardText>
-      </VCard>
+    <v-container class="pa-6">
+      <v-row align="stretch">
+        <v-col cols="12" md="6">
+          <v-card elevation="2" class="d-flex flex-column" style="height: 100%;">
+            <v-card-title class="text-h5">Добро пожаловать в Ознакомление</v-card-title>
+            <v-card-subtitle>Здесь вы можете найти полезную информацию для начала работы с платформой.</v-card-subtitle>
 
-      <VCard class="mb-6" outlined>
-        <VCardTitle class="headline">Дополнительные настройки</VCardTitle>
-        <VCardText>
-          <div class="d-flex flex-column gap-4 mt-4">
-            <VBtn
-              color="secondary"
-              href="/admin/user-settings"
-              prepend-icon="mdi-account-cog"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Настройки пользователей
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/system-settings"
-              prepend-icon="mdi-cogs"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Системные настройки
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/theme-settings"
-              prepend-icon="mdi-palette"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Настройки темы
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/backup"
-              prepend-icon="mdi-backup"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Резервное копирование
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/api-settings"
-              prepend-icon="mdi-api"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Настройки API
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/logs"
-              prepend-icon="mdi-file-document"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Логи и мониторинг
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/notification-settings"
-              prepend-icon="mdi-bell-ring"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Настройки уведомлений
-            </VBtn>
-          </div>
-        </VCardText>
-      </VCard>
-    </div>
+            <v-card-text>
+              <p>
+                На этой странице вы найдете основные разделы для работы с нашей платформой. Ознакомьтесь с основными функциями, чтобы лучше понимать, как использовать все возможности.
+              </p>
+              <v-btn color="primary" @click="openSupportDialog">Перейти к поддержке</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-col>
+
+        <v-col cols="12" md="6">
+          <v-card elevation="2" class="d-flex flex-column" style="height: 100%;">
+            <v-card-title class="text-h5">Поддержка</v-card-title>
+            <v-card-text>
+              <p>Если у вас возникли вопросы или проблемы, не стесняйтесь обратиться в нашу службу поддержки.</p>
+              <v-btn color="secondary" @click="openSupportDialog">Получить помощь</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-dialog v-model="dialog" persistent max-width="500px">
+      <v-card>
+        <v-card-title class="headline">Служба поддержки</v-card-title>
+
+        <v-card-text>
+          <p>Если у вас возникли вопросы или проблемы, вы можете связаться с нами через следующие каналы:</p>
+          <ul>
+            <li>Телефон: +1 (123) 456-7890</li>
+            <li>Электронная почта: support@platform.com</li>
+            <li>Вам обязательно ответят и помогут!</li>
+          </ul>
+          <p>Мы всегда рады помочь!</p>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn color="primary" @click="dialog = false">Закрыть</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </AppLayout>
 </template>
-
-<style scoped>
-.pa-6 {
-  padding: 32px;
-}
-
-.d-flex {
-  display: flex;
-}
-
-.flex-column {
-  flex-direction: column;
-}
-
-.gap-4 {
-  gap: 16px;
-}
-
-.mt-4 {
-  margin-top: 16px;
-}
-
-.text-h6 {
-  font-weight: 600;
-}
-
-.mb-6 {
-  margin-bottom: 24px;
-}
-
-.v-card {
-  background-color: #f5f5f5;
-  border-radius: 12px;
-}
-
-.v-card-title {
-  background-color: #1976d2;
-  color: white;
-  padding: 16px;
-  border-radius: 12px 12px 0 0;
-}
-
-.v-btn {
-  font-size: 16px;
-  padding: 12px;
-}
-</style>
