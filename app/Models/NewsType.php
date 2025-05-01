@@ -17,4 +17,9 @@ class NewsType extends Model
     {
         return $this->hasMany(News::class);
     }
+
+    public function hasRoleById($roleId)
+    {
+        return $this->roles->contains('id', $roleId);
+    }
 }

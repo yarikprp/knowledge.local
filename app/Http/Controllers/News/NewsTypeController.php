@@ -7,6 +7,7 @@ use App\Models\NewsType;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class NewsTypeController extends Controller
 {
@@ -15,6 +16,10 @@ class NewsTypeController extends Controller
      */
     public function index()
     {
+        if (Gate::denies('role-access', 1)) {
+            abort(403, 'Доступ запрещен');
+        }
+
         $newsType = NewsType::all();
 
         return Inertia::render('news/NewsTypeList', [

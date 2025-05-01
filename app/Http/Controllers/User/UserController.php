@@ -8,6 +8,8 @@ use App\Models\Role;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rules;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,6 +22,10 @@ class UserController extends Controller
      */
     public function index()
     {
+        if (Gate::denies('role-access', 1)) {
+            abort(403, 'Доступ запрещен');
+        }
+
         $user = User::with('roles')->get();
         $roles = Role::all()->map(function ($role) {
             return [
@@ -77,13 +83,19 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user): Response
+    public function show($id)
     {
-        $user->load('roles');
-
-        return Inertia::render('user/Show', [
-            'user' => $user
-        ]);
+        try {
+            $user = User::findOrFail($id);
+            $user->load('roles');
+            return Inertia::render('user/Show', [
+                'user' => $user
+            ]);
+        } catch(ModelNotFoundException $e) {
+            return Inertia::render('errors/NotFound', [
+                'message' => 'Пользователь не найден'
+            ]);
+        }
     }
 
     /**

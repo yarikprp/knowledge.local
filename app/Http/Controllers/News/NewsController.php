@@ -9,6 +9,8 @@ use App\Models\NewsType;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class NewsController extends Controller
 {
@@ -29,6 +31,10 @@ class NewsController extends Controller
      */
     public function list(): Response
     {
+        if (Gate::denies('role-access', 1)) {
+            abort(403, 'Доступ запрещен');
+        }
+
         $news = News::with(['user', 'type'])->get();
         $users = User::select('id', 'name')->get();
         $newsTypes = NewsType::select('id', 'name')->get();
@@ -97,12 +103,18 @@ class NewsController extends Controller
     /**
      * Show the specified news.
      */
-    public function show(News $news): Response
+    public function show($id)
     {
-        $news->load(['user', 'type']);
-
-        return Inertia::render('news/Show', [
-            'news' => $news
-        ]);
+        try {
+            $news = News::findOrFail($id);
+            $news->load(['user', 'type']);
+            return Inertia::render('news/Show', [
+                'news' => $news
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return Inertia::render('errors/NotFound', [
+                'message' => 'Новость не найдена'
+            ]);
+        }
     }
 }
