@@ -191,33 +191,33 @@ const submit = () => {
                     required
                 />
 
-                <v-text-field
-                    v-model="form.password"
-                    :loading="isLoading"
-                    :disabled="isLoading"
-                    label="Новый пароль"
-                    :type="showPassword ? 'text' : 'password'"
-                    :error-messages="form.errors.password"
-                    :required="!form.id"
-                >
-                    <template #append-inner>
-                        <v-icon @click="showPassword = !showPassword" class="mr-2" :icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'" />
-                        <v-icon @click="openPasswordGenerator" icon="mdi-dice-multiple" />
-                    </template>
-                </v-text-field>
+                <template v-if="!form.id || form.password">
+                    <v-text-field
+                        v-model="form.password"
+                        :loading="isLoading"
+                        :disabled="isLoading"
+                        label="Новый пароль"
+                        :type="showPassword ? 'text' : 'password'"
+                        :error-messages="form.errors.password"
+                    >
+                        <template #append-inner>
+                            <v-icon @click="showPassword = !showPassword" class="mr-2" :icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'" />
+                            <v-icon @click="openPasswordGenerator" icon="mdi-dice-multiple" />
+                        </template>
+                    </v-text-field>
 
-                <v-text-field
-                    v-if="form.password"
-                    v-model="form.password_confirmation"
-                    :loading="isLoading"
-                    :disabled="isLoading"
-                    label="Подтвердите новый пароль"
-                    :type="showPasswordConfirmation ? 'text' : 'password'"
-                    :error-messages="form.errors.password_confirmation"
-                    required
-                    :append-inner-icon="showPasswordConfirmation ? 'mdi-eye-off' : 'mdi-eye'"
-                    @click:append-inner="showPasswordConfirmation = !showPasswordConfirmation"
-                />
+                    <v-text-field
+                        v-if="form.password"
+                        v-model="form.password_confirmation"
+                        :loading="isLoading"
+                        :disabled="isLoading"
+                        label="Подтвердите новый пароль"
+                        :type="showPasswordConfirmation ? 'text' : 'password'"
+                        :error-messages="form.errors.password_confirmation"
+                        :append-inner-icon="showPasswordConfirmation ? 'mdi-eye-off' : 'mdi-eye'"
+                        @click:append-inner="showPasswordConfirmation = !showPasswordConfirmation"
+                    />
+                </template>
             </v-card-text>
 
             <v-card-actions>
