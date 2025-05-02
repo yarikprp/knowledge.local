@@ -20,6 +20,11 @@ Route::get('admin', function () {
     return Inertia::render('Admin');
 })->middleware(['auth', 'verified'])->name('admin');
 
+
+Route::get('mentor', function () {
+    return Inertia::render('Mentor');
+})->middleware(['auth', 'verified'])->name('mentor');
+
 require __DIR__.'/settings.php';
 require __DIR__.'/news.php';
 require __DIR__.'/auth.php';

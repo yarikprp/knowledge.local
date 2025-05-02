@@ -5,7 +5,7 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage  } from '@inertiajs/vue3';
-import { BookOpen, Shield, LayoutGrid, Newspaper } from 'lucide-vue-next';
+import { BookOpen, Shield, LayoutGrid, Newspaper, UserCircle } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { type PageProps } from '@/types/PageProps';
 
@@ -29,7 +29,12 @@ const mainNavItems: NavItem[] = [
         href: '/admin',
         icon: Shield,
       }]
-    : [])
+    : []),
+    {
+        title: 'Наставник',
+        href: '/mentor',
+        icon: UserCircle,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
