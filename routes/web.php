@@ -20,8 +20,11 @@ Route::get('admin', function () {
     return Inertia::render('Admin');
 })->middleware(['auth', 'verified'])->name('admin');
 
-
 Route::get('mentor', function () {
+    if (Gate::denies('is-mentor', auth()->user())) {
+        return redirect()->route('dashboard');
+    }
+
     return Inertia::render('Mentor');
 })->middleware(['auth', 'verified'])->name('mentor');
 

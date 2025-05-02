@@ -23,19 +23,30 @@ const mainNavItems: NavItem[] = [
         href: '/news',
         icon: Newspaper,
     },
-    ...(user?.id === 1
-    ? [{
-        title: 'Админ',
-        href: '/admin',
-        icon: Shield,
-      }]
-    : []),
-    {
-        title: 'Наставник',
-        href: '/mentor',
-        icon: UserCircle,
-    },
 ];
+
+if (user?.id === 1) {
+    mainNavItems.push(
+        {
+            title: 'Админ',
+            href: '/admin',
+            icon: Shield,
+        },
+        {
+            title: 'Наставник',
+            href: '/mentor',
+            icon: UserCircle,
+        }
+    );
+} else {
+    if (user?.id === 2) {
+        mainNavItems.push({
+            title: 'Наставник',
+            href: '/mentor',
+            icon: UserCircle,
+        });
+    }
+}
 
 const footerNavItems: NavItem[] = [
     {
