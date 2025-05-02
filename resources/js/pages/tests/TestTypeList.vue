@@ -1,9 +1,9 @@
 <template>
-    <Head title="Список типов вопросов" />
-    <AppLayout :breadcrumbs="[{ title: 'Список типов вопросов', href: '/question/type' }]">
+    <Head title="Список типов аттестации" />
+    <AppLayout :breadcrumbs="[{ title: 'Список типов аттестации', href: '/test/type' }]">
         <div class="pa-4">
             <ToolbarDataTable
-                title="Список типов вопросов"
+                title="Список типов теста"
                 :isParentLoading="isLoading"
                 :showSearch="true"
                 v-model="search"
@@ -12,7 +12,7 @@
                 @back="goBack"
             />
 
-            <VDataTable :headers="headers" :items="questionType" :search="search" item-value="id" no-data-text="Вопросов нет" :loading="isLoading">
+            <VDataTable :headers="headers" :items="testType" :search="search" item-value="id" no-data-text="Аттестаций нет" :loading="isLoading">
                 <template v-slot:[`item.actions`]="{ item }">
                     <ActionMenu
                         :buttons="{ isEdit: true, isDelete: true, isGoToView: false }"
@@ -26,7 +26,7 @@
                 </template>
             </VDataTable>
 
-            <QuestionTypeModal v-model="dialog" :QuestionTypeItem="selected" @saved="refreshItems" />
+            <TestTypeModal v-model="dialog" :TestTypeItem="selected" @saved="refreshItems" />
         </div>
     </AppLayout>
 </template>
@@ -34,14 +34,14 @@
 <script setup lang="ts">
 import ActionMenu from '@/components/General/ActionMenu.vue';
 import ToolbarDataTable from '@/components/General/ToolbarDataTable.vue';
-import QuestionTypeModal from '@/components/Modal/Question/QuestionTypeModal.vue';
+import TestTypeModal from '@/components/Modal/Test/TestTypeModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Head, router } from '@inertiajs/vue3';
 import { defineProps, ref } from 'vue';
 
 defineProps({
-    questionType: {
+    testType: {
         type: Array,
         required: true,
     },
@@ -66,7 +66,7 @@ interface Item {
 const refreshItems = () => {
     isLoading.value = true;
     router.reload({
-        only: ['questionType'],
+        only: ['testType'],
         onFinish: () => {
             isLoading.value = false;
         },
@@ -84,14 +84,14 @@ const updateItem = (item: Item) => {
 };
 
 const deleteItem = (item: Item) => {
-    if (confirm(`Удалить тип вопроса "${item.name}"?`)) {
-        Inertia.delete(`/question/type/${item.id}`, {
+    if (confirm(`Удалить тип теста "${item.name}"?`)) {
+        Inertia.delete(`/test/type/${item.id}`, {
             onSuccess: () => {
-                alert('Тип вопроса успешно удален.');
+                alert('Тип теста успешно удален.');
                 refreshItems();
             },
             onError: () => {
-                alert('Ошибка при удалении типа вопроса.');
+                alert('Ошибка при удалении типа теста.');
             },
         });
     }
