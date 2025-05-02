@@ -23,7 +23,7 @@ const breadcrumbs: BreadcrumbItem[] = [
           <div class="d-flex flex-column gap-4 mt-4">
             <VBtn
               color="primary"
-              href="#"
+              href="/subject"
               prepend-icon="mdi-book-open-page-variant"
               class="d-flex justify-start align-center text-h6"
             >
@@ -36,14 +36,6 @@ const breadcrumbs: BreadcrumbItem[] = [
               class="d-flex justify-start align-center text-h6"
             >
               Материалы
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="#"
-              prepend-icon="mdi-comment-question"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Ответы
             </VBtn>
           </div>
         </VCardText>
