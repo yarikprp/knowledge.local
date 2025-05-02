@@ -63,7 +63,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             </VBtn>
             <VBtn
               color="primary"
-              href="#"
+              href="/question/type"
               prepend-icon="mdi-shape"
               class="d-flex justify-start align-center text-h6"
             >
