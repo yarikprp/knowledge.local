@@ -85,6 +85,10 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        if (Gate::denies('role-access', 1)) {
+            abort(403, 'Доступ запрещен');
+        }
+
         try {
             $user = User::findOrFail($id);
             $user->load('roles');
