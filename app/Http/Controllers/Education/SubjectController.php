@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Education;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subject;
+use App\Models\Material;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
@@ -53,5 +54,17 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         $subject->delete();
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Subject $subject): Response
+    {
+        $subject->load('materials');
+
+        return Inertia::render('education/SubjectShow', [
+            'subject' => $subject,
+        ]);
     }
 }
