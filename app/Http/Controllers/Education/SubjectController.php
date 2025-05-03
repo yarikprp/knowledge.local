@@ -22,7 +22,21 @@ class SubjectController extends Controller
         return Inertia::render('education/SubjectList', [
             'subject' => $subject,
         ]);
+
     }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function list()
+    {
+        $subject = Subject::all();
+
+        return Inertia::render('education/Subject', [
+            'subject' => $subject,
+        ]);
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -31,6 +45,7 @@ class SubjectController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
         ]);
 
         Subject::create($validated);
@@ -43,6 +58,7 @@ class SubjectController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
         ]);
 
         $subject->update($validated);

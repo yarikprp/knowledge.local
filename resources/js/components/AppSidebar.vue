@@ -23,6 +23,11 @@ const mainNavItems: NavItem[] = [
         href: '/news',
         icon: Newspaper,
     },
+    {
+        title: 'Предмет',
+        href: '/subject/list',
+        icon: BookOpen,
+    },
 ];
 
 if (user?.id === 1) {

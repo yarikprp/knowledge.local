@@ -57,6 +57,7 @@ const headers = ref([
     { title: 'Действия', key: 'actions', sortable: false },
     { title: '#', key: 'id' },
     { title: 'Заголовок', key: 'name' },
+    { title: 'Описание', key: 'description' },
 ]);
 
 interface Item {
