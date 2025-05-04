@@ -10,4 +10,9 @@ class TestType extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    public function tests()
+    {
+        return $this->hasMany(Test::class, 'test_types_id');
+    }
 }
