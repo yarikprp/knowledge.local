@@ -28,6 +28,11 @@ Route::get('mentor', function () {
     return Inertia::render('Mentor');
 })->middleware(['auth', 'verified'])->name('mentor');
 
+
+Route::get('test', function () {
+    return Inertia::render('Test');
+})->middleware(['auth', 'verified'])->name('test');
+
 require __DIR__.'/settings.php';
 require __DIR__.'/news.php';
 require __DIR__.'/auth.php';
