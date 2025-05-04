@@ -5,11 +5,13 @@ import { computed, defineEmits, defineProps, ref, watch } from 'vue';
 interface QuestionTypeItemProps {
     id: number;
     name: string;
+    slug: string;
 }
 
 interface QuestionTypeForm {
     id?: number;
     name: string;
+    slug: string;
 }
 
 const props = defineProps<{
@@ -22,6 +24,7 @@ const isLoading = ref(false);
 
 const form = useForm<QuestionTypeForm>({
     name: '',
+    slug: '',
 });
 
 const dialog = ref(props.modelValue);
@@ -32,6 +35,7 @@ watch(
         dialog.value = value;
         if (value && props.QuestionTypeItem) {
             form.name = props.QuestionTypeItem.name;
+            form.slug = props.QuestionTypeItem.slug;
         } else {
             form.reset();
         }
@@ -51,6 +55,11 @@ const validationErrors = computed(() => {
         errors.name = 'Заголовок не должен превышать 255 символов';
     }
 
+    if (!form.slug || form.slug.trim() === '') {
+        errors.slug = 'Заголовок обязателен';
+    } else if (form.slug.length > 255) {
+        errors.slug = 'Заголовок не должен превышать 50 символов';
+    }
     return errors;
 });
 
@@ -104,6 +113,14 @@ const submit = () => {
                     :disabled="isLoading"
                     label="Заголовок"
                     :error-messages="form.errors.name"
+                    required
+                />
+                <v-text-field
+                    v-model="form.slug"
+                    :loading="isLoading"
+                    :disabled="isLoading"
+                    label="Слаг"
+                    :error-messages="form.errors.slug"
                     required
                 />
             </v-card-text>

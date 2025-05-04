@@ -30,6 +30,7 @@ class QuestionTypeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
         ]);
 
         QuestionType::create($validated);
@@ -42,6 +43,7 @@ class QuestionTypeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
         ]);
 
         $questionType->update($validated);

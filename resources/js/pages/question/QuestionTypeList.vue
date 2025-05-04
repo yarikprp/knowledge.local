@@ -56,11 +56,13 @@ const headers = ref([
     { title: 'Действия', key: 'actions', sortable: false },
     { title: '#', key: 'id' },
     { title: 'Заголовок', key: 'name' },
+    { title: 'Слаг', key: 'slug' },
 ]);
 
 interface Item {
     id: number;
     name: string;
+    slug: string;
 }
 
 const refreshItems = () => {
