@@ -40,6 +40,7 @@ require __DIR__.'/user.php';
 require __DIR__.'/question.php';
 require __DIR__.'/test.php';
 require __DIR__.'/education.php';
+require __DIR__.'/rest.php';
 
 Route::fallback(function () {
     return Inertia::render('errors/NotFound');

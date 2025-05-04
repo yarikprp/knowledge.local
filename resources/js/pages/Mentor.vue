@@ -87,6 +87,14 @@ const breadcrumbs: BreadcrumbItem[] = [
             </VBtn>
             <VBtn
               color="primary"
+              href="#"
+              prepend-icon="mdi-calendar-check"
+              class="d-flex justify-start align-center text-h6"
+            >
+              Календарь аттестаций
+            </VBtn>
+            <VBtn
+              color="primary"
               href="/test/type"
               prepend-icon="mdi-shape-outline"
               class="d-flex justify-start align-center text-h6"
@@ -119,11 +127,19 @@ const breadcrumbs: BreadcrumbItem[] = [
           <div class="d-flex flex-column gap-4 mt-4">
             <VBtn
               color="primary"
-              href="#"
-              prepend-icon="mdi-star-check"
+              href="/status"
+              prepend-icon="mdi-format-list-bulleted"
               class="d-flex justify-start align-center text-h6"
             >
-              Оценка
+              Статусы
+            </VBtn>
+            <VBtn
+              color="primary"
+              href="#"
+              prepend-icon="mdi-calendar-clock"
+              class="d-flex justify-start align-center text-h6"
+            >
+              События
             </VBtn>
           </div>
         </VCardText>
