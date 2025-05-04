@@ -1,9 +1,9 @@
 <template>
-    <Head title="Список статусов" />
-    <AppLayout :breadcrumbs="[{ title: 'Список статусов', href: '/status' }]">
+    <Head title="Список событий" />
+    <AppLayout :breadcrumbs="[{ title: 'Список событий', href: '/event' }]">
         <div class="pa-4">
             <ToolbarDataTable
-                title="Список статусов"
+                title="Список событий"
                 :isParentLoading="isLoading"
                 :showSearch="true"
                 v-model="search"
@@ -12,7 +12,7 @@
                 @back="goBack"
             />
 
-            <VDataTable :headers="headers" :items="statuses" :search="search" item-value="id" no-data-text="Статусов нет" :loading="isLoading">
+            <VDataTable :headers="headers" :items="events" :search="search" item-value="id" no-data-text="Событий нет" :loading="isLoading">
                 <template v-slot:[`item.actions`]="{ item }">
                     <ActionMenu
                         :buttons="{ isEdit: true, isDelete: true, isGoToView: false }"
@@ -26,7 +26,7 @@
                 </template>
             </VDataTable>
 
-            <StatusModal v-model="dialog" :StatusFormItem="selected" @saved="refreshItems" />
+            <EventTypeModal v-model="dialog" :EventTypeFormFormItem="selected" @saved="refreshItems" />
         </div>
     </AppLayout>
 </template>
@@ -34,14 +34,14 @@
 <script setup lang="ts">
 import ActionMenu from '@/components/General/ActionMenu.vue';
 import ToolbarDataTable from '@/components/General/ToolbarDataTable.vue';
-import StatusModal from '@/components/Modal/Rest/StatusModal.vue';
+import EventTypeModal from '@/components/Modal/Rest/EventTypeModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Head, router } from '@inertiajs/vue3';
 import { defineProps, ref } from 'vue';
 
 defineProps({
-    statuses: {
+    events: {
         type: Array,
         required: true,
     },
@@ -66,7 +66,7 @@ interface Item {
 const refreshItems = () => {
     isLoading.value = true;
     router.reload({
-        only: ['statuses'],
+        only: ['events'],
         onFinish: () => {
             isLoading.value = false;
         },
@@ -84,14 +84,14 @@ const updateItem = (item: Item) => {
 };
 
 const deleteItem = (item: Item) => {
-    if (confirm(`Удалить статус "${item.name}"?`)) {
-        Inertia.delete(`/status/${item.id}`, {
+    if (confirm(`Удалить событие "${item.name}"?`)) {
+        Inertia.delete(`/event/${item.id}`, {
             onSuccess: () => {
-                alert('Статус успешно удален.');
+                alert('Событие успешно удален.');
                 refreshItems();
             },
             onError: () => {
-                alert('Ошибка при удалении статуса.');
+                alert('Ошибка при удалении события.');
             },
         });
     }

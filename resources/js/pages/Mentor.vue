@@ -135,7 +135,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             </VBtn>
             <VBtn
               color="primary"
-              href="#"
+              href="/event"
               prepend-icon="mdi-calendar-clock"
               class="d-flex justify-start align-center text-h6"
             >
