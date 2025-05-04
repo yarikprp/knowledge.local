@@ -56,9 +56,9 @@ const validationErrors = computed(() => {
     }
 
     if (!form.slug || form.slug.trim() === '') {
-        errors.slug = 'Заголовок обязателен';
+        errors.slug = 'Слаг обязателен';
     } else if (form.slug.length > 255) {
-        errors.slug = 'Заголовок не должен превышать 50 символов';
+        errors.slug = 'Слаг не должен превышать 50 символов';
     }
     return errors;
 });
@@ -74,7 +74,7 @@ const submit = () => {
     isLoading.value = true;
 
     if (props.QuestionTypeItem?.id) {
-        form.put(route('type.update', props.QuestionTypeItem.id), {
+        form.put(route('types.update', props.QuestionTypeItem.id), {
             onSuccess: () => {
                 emit('saved');
                 dialog.value = false;
@@ -85,7 +85,7 @@ const submit = () => {
             },
         });
     } else {
-        form.post(route('type.store'), {
+        form.post(route('types.store'), {
             onSuccess: () => {
                 emit('saved');
                 dialog.value = false;

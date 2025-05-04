@@ -42,7 +42,7 @@ import { defineProps, ref } from 'vue';
 
 defineProps({
     questionType: {
-        type: Array,
+        types: Array,
         required: true,
     },
 });

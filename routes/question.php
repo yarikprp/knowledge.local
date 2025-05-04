@@ -7,7 +7,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/question/type', fn () => redirect('/question/type/index'));
 
     // --- Question Types ---
-    Route::prefix('question/type')->name('type.')->group(function () {
+    Route::prefix('question/type')->name('types.')->group(function () {
         Route::get('/', [QuestionTypeController::class, 'index'])->name('index');
         Route::post('/', [QuestionTypeController::class, 'store'])->name('store');
         Route::put('/{questionType}', [QuestionTypeController::class, 'update'])->name('update');
