@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\TestType;
+use App\Models\QuestionType;
 
 class Test extends Model
 {
@@ -25,5 +26,10 @@ class Test extends Model
     public function testType()
     {
         return $this->belongsTo(TestType::class, 'test_types_id');
+    }
+
+    public function questionType()
+    {
+        return $this->belongsTo(QuestionType::class);
     }
 }
