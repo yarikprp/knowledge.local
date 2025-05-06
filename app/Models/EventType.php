@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Calendar;
 
 class EventType extends Model
 {
@@ -12,4 +13,9 @@ class EventType extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function calendars()
+    {
+        return $this->hasMany(Calendar::class);
+    }
 }

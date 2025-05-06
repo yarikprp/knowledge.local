@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\TestType;
 use App\Models\QuestionType;
+use App\Models\Calendar;
 
 class Test extends Model
 {
@@ -31,5 +32,10 @@ class Test extends Model
     public function questionType()
     {
         return $this->belongsTo(QuestionType::class);
+    }
+
+    public function calendars()
+    {
+        return $this->hasMany(Calendar::class);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Calendar;
+
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,5 +52,10 @@ class User extends Authenticatable
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    public function calendars()
+    {
+        return $this->hasMany(Calendar::class);
     }
 }
