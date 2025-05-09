@@ -12,6 +12,7 @@ use Inertia\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class CalendarController extends Controller
 {
@@ -79,9 +80,31 @@ class CalendarController extends Controller
 
         $validated['is_notified'] = false;
 
-        Calendar::create($validated);
-    }
+        $calendar = Calendar::create($validated);
 
+        try {
+            $token = env('TELEGRAM_BOT_TOKEN');
+            $chat_id = env('TELEGRAM_CHAT_ID');
+
+            $eventType = EventType::find($validated['event_type_id'])->name ?? 'Неизвестно';
+            $user = User::find($validated['user_id'])->name ?? 'Неизвестный';
+            $date = \Carbon\Carbon::parse($validated['event_date'])->locale('ru')->isoFormat('D MMMM YYYY');
+            $notes = $validated['notes'] ?? 'Без заметок';
+
+            $message = "🆕 Новое событие:\n"
+                    . "📅 Дата: $date\n"
+                    . "👤 Пользователь: $user\n"
+                    . "📌 Событие: $eventType\n"
+                    . "📝 Заметки: $notes";
+
+            Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'chat_id' => $chat_id,
+                'text' => $message,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Ошибка отправки Telegram: ' . $e->getMessage());
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -97,7 +120,37 @@ class CalendarController extends Controller
             'is_notified' => 'boolean',
         ]);
 
+        $isUpdated = false;
+        if ($calendar->event_date != $validated['event_date'] || $calendar->event_type_id != $validated['event_type_id'] || $calendar->notes != $validated['notes']) {
+            $isUpdated = true;
+        }
+
         $calendar->update($validated);
+
+        if ($isUpdated) {
+            try {
+                $token = env('TELEGRAM_BOT_TOKEN');
+                $chat_id = env('TELEGRAM_CHAT_ID');
+
+                $eventType = EventType::find($validated['event_type_id'])->name ?? 'Неизвестно';
+                $user = User::find($validated['user_id'])->name ?? 'Неизвестный';
+                $date = \Carbon\Carbon::parse($validated['event_date'])->locale('ru')->isoFormat('D MMMM YYYY');
+                $notes = $validated['notes'] ?? 'Без заметок';
+
+                $message = "📝 Обновление события:\n"
+                        . "📅 Дата: $date\n"
+                        . "👤 Пользователь: $user\n"
+                        . "📌 Событие: $eventType\n"
+                        . "📝 Заметки: $notes";
+
+                Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                    'chat_id' => $chat_id,
+                    'text' => $message,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Ошибка отправки Telegram: ' . $e->getMessage());
+            }
+        }
     }
 
     /**
