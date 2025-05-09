@@ -2,6 +2,11 @@
     <Head title="Календарь" />
     <AppLayout :breadcrumbs="[{ title: 'Календарь', href: '/calendar' }]">
         <div class="pa-4">
+            <v-btn color="primary" variant="flat" class="mb-4 ml-auto" @click="goToCalendar">
+                <v-icon start>mdi-calendar-month</v-icon>
+                Перейти в календарь
+            </v-btn>
+
             <ToolbarDataTable
                 title="Календарь"
                 :isParentLoading="isLoading"
@@ -77,7 +82,6 @@ defineProps<{
     tests: { id: number; name: string }[];
 }>();
 
-
 const search = ref('');
 const selected = ref<Item | null>(null);
 const dialog = ref(false);
@@ -133,7 +137,6 @@ const updateItem = (item: Item) => {
     dialog.value = true;
 };
 
-
 const deleteItem = (item: Item) => {
     const formatted = formatDate(item.event_date, 'DD MMMM YYYY, HH:mm');
     if (confirm(`Удалить запись с датой "${formatted}"?`)) {
@@ -149,6 +152,9 @@ const deleteItem = (item: Item) => {
     }
 };
 
+const goToCalendar = () => {
+    window.location.href = '/calendars';
+};
 
 const goBack = () => {
     window.history.back();

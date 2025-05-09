@@ -31,5 +31,17 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{calendar}', [CalendarController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/mark-as-notified', [CalendarController::class, 'markAsNotified'])->name('markAsNotified');
     });
+
+    Route::prefix('calendars')->name('calendars.')->group(function () {
+        Route::get('/', [CalendarController::class, 'calendars'])->name('calendars');
+        Route::post('/', [CalendarController::class, 'store'])->name('store');
+        Route::put('/{calendars}', [CalendarController::class, 'update'])->name('update');
+        Route::delete('/{calendars}', [CalendarController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('test-calendar')->name('test-calendar.')->group(function () {
+        Route::get('/', [CalendarController::class, 'calendarsForUser'])->name('forUser');
+        Route::post('/{id}/mark-as-notified', [CalendarController::class, 'markAsNotified'])->name('markAsNotified');
+    });
 });
 

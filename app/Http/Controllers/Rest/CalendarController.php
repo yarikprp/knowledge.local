@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class CalendarController extends Controller
 {
@@ -25,6 +26,40 @@ class CalendarController extends Controller
             'calendars' => $calendars,
             'events' => EventType::select('id', 'name')->get(),
             'users' => User::select('id', 'name')->get(),
+            'tests' => Test::select('id', 'name')->get(),
+        ]);
+    }
+
+    /**
+     * Display a calendar of the resource.
+     */
+    public function calendars()
+    {
+        $calendars = Calendar::with(['user', 'eventType', 'testing'])->get();
+
+        return Inertia::render('rest/Calendar', [
+            'calendars' => $calendars,
+            'events' => EventType::select('id', 'name')->get(),
+            'users' => User::select('id', 'name')->get(),
+            'tests' => Test::select('id', 'name')->get(),
+        ]);
+    }
+
+    /**
+     * Display a calendar for user of the resource.
+     */
+    public function calendarsForUser()
+    {
+        $user = auth()->user();
+
+        $calendars = Calendar::with(['user', 'eventType', 'testing'])
+                            ->where('user_id', $user->id)
+                            ->get();
+
+        return Inertia::render('TestCalendar', [
+            'calendars' => $calendars,
+            'events' => EventType::select('id', 'name')->get(),
+            'users' => User::where('id', $user->id)->select('id', 'name')->get(),
             'tests' => Test::select('id', 'name')->get(),
         ]);
     }
@@ -80,13 +115,11 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($id);
 
-        if ($calendar->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Недостаточно прав'], 403);
+        if ($calendar->user_id !== auth()->id()) {
+            abort(403, 'Доступ запрещен');
         }
 
         $calendar->is_notified = true;
         $calendar->save();
-
-        return response()->json(['message' => 'Отмечено как уведомлено']);
     }
 }

@@ -29,7 +29,11 @@ Route::get('mentor', function () {
 })->middleware(['auth', 'verified'])->name('mentor');
 
 
-Route::get('test', function () {
+Route::get('test-calendar', function () {
+    return Inertia::render('TestCalendar');
+})->middleware(['auth', 'verified'])->name('test-calendar');
+
+Route::get('test/list', function () {
     return Inertia::render('Test');
 })->middleware(['auth', 'verified'])->name('test');
 
