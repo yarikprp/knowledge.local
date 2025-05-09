@@ -9,6 +9,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SubjectController extends Controller
 {
@@ -82,5 +83,14 @@ class SubjectController extends Controller
         return Inertia::render('education/SubjectShow', [
             'subject' => $subject,
         ]);
+    }
+
+    public function downloadPdf(Subject $subject)
+    {
+        $subject->load('materials');
+
+        $pdf = Pdf::loadView('pdf.subject', ['subject' => $subject]);
+
+        return $pdf->download("{$subject->name}.pdf");
     }
 }

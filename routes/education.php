@@ -9,6 +9,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/subject', fn () => redirect('/subject/list'));
     Route::get('/subject', fn () => redirect('/subject/show'));
     Route::get('/material', fn () => redirect('/material/index'));
+    Route::get('/subjects/{subject}/download', [SubjectController::class, 'downloadPdf'])->name('subjects.download');
 
     // --- Subject  ---
     Route::prefix('subject')->name('subject.')->group(function () {
