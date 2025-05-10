@@ -63,11 +63,19 @@ const breadcrumbs: BreadcrumbItem[] = [
             </VBtn>
             <VBtn
               color="primary"
-              href="#"
+              href="question/correct-answer"
               prepend-icon="mdi-reply-all"
               class="d-flex justify-start align-center text-h6"
             >
               Ответы
+            </VBtn>
+            <VBtn
+              color="primary"
+              href="question/option"
+              prepend-icon="mdi-reply-all"
+              class="d-flex justify-start align-center text-h6"
+            >
+              Варианты ответов
             </VBtn>
           </div>
         </VCardText>

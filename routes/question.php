@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Questions\QuestionController;
 use App\Http\Controllers\Questions\QuestionTypeController;
+use App\Http\Controllers\Questions\QuestionCorrectAnswerController;
+use App\Http\Controllers\Questions\QuestionOptionController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -22,6 +24,22 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [QuestionTypeController::class, 'store'])->name('store');
         Route::put('/{questionType}', [QuestionTypeController::class, 'update'])->name('update');
         Route::delete('/{questionType}', [QuestionTypeController::class, 'destroy'])->name('destroy');
+    });
+
+    // --- Question Correct Answers ---
+    Route::prefix('question/correct-answer')->name('correctAnswers.')->group(function () {
+        Route::get('/', [QuestionCorrectAnswerController::class, 'index'])->name('index');
+        Route::post('/', [QuestionCorrectAnswerController::class, 'store'])->name('store');
+        Route::put('/{questionCorrectAnswer}', [QuestionCorrectAnswerController::class, 'update'])->name('update');
+        Route::delete('/{questionCorrectAnswer}', [QuestionCorrectAnswerController::class, 'destroy'])->name('destroy');
+    });
+
+    // --- Question Options ---
+    Route::prefix('question/option')->name('options.')->group(function () {
+        Route::get('/', [QuestionOptionController::class, 'index'])->name('index');
+        Route::post('/', [QuestionOptionController::class, 'store'])->name('store');
+        Route::put('/{questionOption}', [QuestionOptionController::class, 'update'])->name('update');
+        Route::delete('/{questionOption}', [QuestionOptionController::class, 'destroy'])->name('destroy');
     });
 });
 

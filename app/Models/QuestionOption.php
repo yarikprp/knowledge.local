@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Question;
 
-class QuestionCorrectAnswer extends Model
+class QuestionOption extends Model
 {
     use HasFactory;
 
@@ -15,7 +15,6 @@ class QuestionCorrectAnswer extends Model
         'text'
     ];
 
-    // Связь с таблицей question
     public function question()
     {
         return $this->belongsTo(Question::class);
