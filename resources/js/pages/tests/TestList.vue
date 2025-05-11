@@ -15,9 +15,10 @@
             <VDataTable :headers="headers" :items="tests" :search="search" item-value="id" no-data-text="Аттестаций нет" :loading="isLoading">
                 <template v-slot:[`item.actions`]="{ item }">
                     <ActionMenu
-                        :buttons="{ isEdit: true, isDelete: true, isGoToView: false }"
+                        :buttons="{ isEdit: true, isDelete: true, isGoToView: true }"
                         @edit="updateItem(item as Item)"
                         @delete="deleteItem(item as Item)"
+                        @goToView="goToView(item as Item)"
                     />
                 </template>
 
@@ -123,6 +124,9 @@ const deleteItem = (item: Item) => {
     }
 };
 
+const goToView = (item: Item) => {
+    router.visit(`/test/${item.id}`);
+};
 
 const goBack = () => {
     window.history.back();

@@ -9,6 +9,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class SubjectController extends Controller
@@ -76,13 +77,20 @@ class SubjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Subject $subject): Response
+    public function show($id): Response
     {
+        try {
+        $subject = Subject::findOrFail($id);
         $subject->load('materials');
 
         return Inertia::render('education/SubjectShow', [
             'subject' => $subject,
         ]);
+        } catch (ModelNotFoundException $e) {
+            return Inertia::render('errors/NotFound', [
+                'message' => 'Новость не найдена'
+            ]);
+        }
     }
 
     public function downloadPdf(Subject $subject)

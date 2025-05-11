@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Test;;
 use App\Http\Controllers\Controller;
 use App\Models\Test;
 use App\Models\TestType;
+use App\Models\Question;
+use App\Models\QuestionType;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
@@ -52,8 +54,10 @@ class TestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Test $test)
+    public function update(Request $request, $id)
     {
+        $test = Test::findOrFail($id);
+
         $validated = $request->validate([
             'name' => 'required|string',
             'slug' => 'required|string|unique:tests,slug,' . $test->id,
@@ -73,10 +77,36 @@ class TestController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show($id): Response
+    {
+        try {
+        $test = Test::findOrFail($id);
+
+        $test->load(['questions', 'testType', 'questions.questionType',]);
+        $testTypes = TestType::all();
+
+        return Inertia::render('tests/Show', [
+            'test' => $test,
+            'questions' => $test->questions,
+            'testTypes' => $testTypes,
+            'questionTypes' => QuestionType::select('id', 'name')->get(),
+        ]);
+        } catch (ModelNotFoundException $e) {
+            return Inertia::render('errors/NotFound', [
+                'message' => 'Новость не найдена'
+            ]);
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Test $test)
+    public function destroy($id)
     {
+        $test = Test::findOrFail($id);
         $test->delete();
+        return redirect()->route('test.index')->with('success', 'Тест успешно удален');
     }
 }

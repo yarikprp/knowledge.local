@@ -13,9 +13,11 @@ Route::middleware('auth')->group(function () {
     // --- Test ---
     Route::prefix('test')->name('test.')->group(function () {
         Route::get('/', [TestController::class, 'index'])->name('index');
+        Route::get('/{test}', [TestController::class, 'show'])->name('show');
         Route::post('/', [TestController::class, 'store'])->name('store');
         Route::put('/{test}', [TestController::class, 'update'])->name('update');
         Route::delete('/{test}', [TestController::class, 'destroy'])->name('destroy');
+        Route::put('/{test}', [TestController::class, 'update'])->name('update');
     });
 
     // --- Test Types ---

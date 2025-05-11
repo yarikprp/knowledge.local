@@ -8,6 +8,7 @@ use App\Models\TestType;
 use App\Models\QuestionType;
 use App\Models\Calendar;
 use App\Models\Attempt;
+use App\Models\Question;
 
 class Test extends Model
 {
@@ -43,5 +44,10 @@ class Test extends Model
     public function attempts()
     {
         return $this->hasMany(Attempt::class);
+    }
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
     }
 }

@@ -37,13 +37,14 @@ const markAsRead = (id: number) => {
     <AppLayout :breadcrumbs="[{ title: 'Просмотр предмета', href: '/education/SubjectShow' }]">
         <div class="pa-4">
             <VCard>
-                <VCardTitle class="text-h5"
-                    >{{ subject.name }}
+                <v-toolbar flat density="comfortable">
+                    <v-toolbar-title>{{ subject.name }}</v-toolbar-title>
+                    <v-spacer />
                     <VBtn color="secondary" :href="`/subjects/${subject.id}/download`" target="_blank">
                         <v-icon left>mdi-download</v-icon>
                         Скачать PDF
                     </VBtn>
-                </VCardTitle>
+                </v-toolbar>
                 <VCardText class="mt-4">
                     <div v-if="subject.materials.length">
                         <VCard v-for="material in subject.materials" :key="material.id" class="mb-4" outlined>
