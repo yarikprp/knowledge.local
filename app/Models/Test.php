@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\TestType;
 use App\Models\QuestionType;
 use App\Models\Calendar;
+use App\Models\Attempt;
 
 class Test extends Model
 {
@@ -37,5 +38,10 @@ class Test extends Model
     public function calendars()
     {
         return $this->hasMany(Calendar::class);
+    }
+
+    public function attempts()
+    {
+        return $this->hasMany(Attempt::class);
     }
 }

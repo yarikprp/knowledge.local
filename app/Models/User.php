@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Calendar::class);
     }
+
+    public function attempts()
+    {
+        return $this->hasMany(Attempt::class);
+    }
 }

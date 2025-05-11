@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Test\TestTypeController;
 use App\Http\Controllers\Test\TestController;
+use App\Http\Controllers\Test\AttemptController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -22,6 +23,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [TestTypeController::class, 'store'])->name('store');
         Route::put('/{testType}', [TestTypeController::class, 'update'])->name('update');
         Route::delete('/{testType}', [TestTypeController::class, 'destroy'])->name('destroy');
+    });
+
+    // --- Attempt ---
+    Route::prefix('/test/attempt')->name('attempt.')->group(function () {
+        Route::get('/', [AttemptController::class, 'index'])->name('index');
+        Route::post('/', [AttemptController::class, 'store'])->name('store');
+        Route::put('/{attempt}', [AttemptController::class, 'update'])->name('update');
+        Route::delete('/{attempt}', [AttemptController::class, 'destroy'])->name('destroy');
     });
 });
 
