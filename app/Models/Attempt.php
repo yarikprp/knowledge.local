@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Test;
 use App\Models\User;
 use App\Models\Status;
+use App\Models\Answer;
 
 class Attempt extends Model
 {
@@ -37,5 +38,10 @@ class Attempt extends Model
     public function status()
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
     }
 }

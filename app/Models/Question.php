@@ -8,6 +8,7 @@ use App\Models\Test;
 use App\Models\QuestionOption;
 use App\Models\QuestionCorrectAnswer;
 use App\Models\QuestionType;
+use App\Models\Answer;
 
 class Question extends Model
 {
@@ -40,5 +41,10 @@ class Question extends Model
     public function questionType()
     {
         return $this->belongsTo(QuestionType::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
     }
 }
