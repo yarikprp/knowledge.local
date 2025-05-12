@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::get('/test', fn () => redirect('/test/index'));
     Route::get('/test/type', fn () => redirect('/test/type/index'));
+    Route::get('/test/answer', fn () => redirect('/test/answer/index'));
+    Route::get('/test/attempt', fn () => redirect('/test/attempt/index'));
 
     // --- Test ---
     Route::prefix('test')->name('test.')->group(function () {

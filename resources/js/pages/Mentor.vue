@@ -111,7 +111,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             </VBtn>
             <VBtn
               color="primary"
-              href="test/answer"
+              href="/test/answer"
               prepend-icon="mdi-chart-bar"
               class="d-flex justify-start align-center text-h6"
             >
