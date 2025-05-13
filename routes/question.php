@@ -13,6 +13,7 @@ Route::middleware('auth')->group(function () {
     // --- Question ---
     Route::prefix('question')->name('question.')->group(function () {
         Route::get('/', [QuestionController::class, 'index'])->name('index');
+        Route::get('/{question}', [QuestionController::class, 'show'])->name('show');
         Route::post('/', [QuestionController::class, 'store'])->name('store');
         Route::put('/{question}', [QuestionController::class, 'update'])->name('update');
         Route::delete('/{question}', [QuestionController::class, 'destroy'])->name('destroy');

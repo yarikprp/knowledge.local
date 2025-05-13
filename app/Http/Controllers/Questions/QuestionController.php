@@ -62,6 +62,25 @@ class QuestionController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Question $question)
+    {
+        $question->load([
+            'test',
+            'questionType',
+            'options',
+            'correctAnswers'
+        ]);
+
+        return Inertia::render('question/Show', [
+            'question' => $question,
+            'tests' => Test::select('id', 'name')->get(),
+            'questionTypes' => QuestionType::select('id', 'name')->get(),
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Question $question)
