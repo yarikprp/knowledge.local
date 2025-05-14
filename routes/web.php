@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Test\TestTypeController;
+use App\Http\Controllers\Test\TestController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -33,9 +35,9 @@ Route::get('test-calendar', function () {
     return Inertia::render('TestCalendar');
 })->middleware(['auth', 'verified'])->name('test-calendar');
 
-Route::get('test/list', function () {
-    return Inertia::render('Test');
-})->middleware(['auth', 'verified'])->name('test');
+Route::get('test/list', [TestController::class, 'list'])
+    ->middleware(['auth', 'verified'])
+    ->name('test');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/news.php';

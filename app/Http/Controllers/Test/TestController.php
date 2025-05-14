@@ -30,6 +30,20 @@ class TestController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function list()
+    {
+        $tests = Test::with('testType')->get();
+        $testTypes = TestType::all();
+
+        return Inertia::render('Test', [
+            'tests' => $tests,
+            'testTypes' => $testTypes,
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
