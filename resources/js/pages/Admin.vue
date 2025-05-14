@@ -2,7 +2,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { VBtn, VCard, VCardTitle, VCardText } from 'vuetify/components';
+import { VBtn, VCard, VCardTitle, VCardText, VRow, VCol, VIcon } from 'vuetify/components';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -10,155 +10,212 @@ const breadcrumbs: BreadcrumbItem[] = [
     href: '/admin',
   },
 ];
+
+const adminSections = [
+  {
+    title: 'Управление контентом',
+    icon: 'mdi-cog',
+    color: 'primary',
+    items: [
+      {
+        title: 'Новости',
+        icon: 'mdi-newspaper-variant',
+        href: '/news/newsList',
+        color: 'indigo'
+      },
+      {
+        title: 'Типы новостей',
+        icon: 'mdi-tag-multiple',
+        href: '/news/type',
+        color: 'deep-purple'
+      },
+      {
+        title: 'Пользователи',
+        icon: 'mdi-account-supervisor',
+        href: '/user',
+        color: 'blue'
+      }
+    ]
+  },
+  {
+    title: 'Системные настройки',
+    icon: 'mdi-server',
+    color: 'secondary',
+    items: [
+      {
+        title: 'Настройки пользователей',
+        icon: 'mdi-account-cog',
+        href: '/admin/user-settings',
+        color: 'teal'
+      },
+      {
+        title: 'Системные настройки',
+        icon: 'mdi-tune',
+        href: '/admin/system-settings',
+        color: 'green'
+      },
+      {
+        title: 'Настройки темы',
+        icon: 'mdi-palette-advanced',
+        href: '/admin/theme-settings',
+        color: 'deep-orange'
+      }
+    ]
+  },
+  {
+    title: 'Безопасность и данные',
+    icon: 'mdi-shield-lock',
+    color: 'secondary',
+    items: [
+      {
+        title: 'Резервное копирование',
+        icon: 'mdi-database-export',
+        href: '/admin/backup',
+        color: 'amber'
+      },
+      {
+        title: 'Логи и мониторинг',
+        icon: 'mdi-clipboard-text',
+        href: '/admin/logs',
+        color: 'brown'
+      },
+      {
+        title: 'API управление',
+        icon: 'mdi-api',
+        href: '/admin/api-settings',
+        color: 'purple'
+      }
+    ]
+  },
+  {
+    title: 'Уведомления',
+    icon: 'mdi-bell-alert',
+    color: 'secondary',
+    items: [
+      {
+        title: 'Настройки уведомлений',
+        icon: 'mdi-bell-cog',
+        href: '/admin/notification-settings',
+        color: 'pink'
+      },
+      {
+        title: 'Шаблоны сообщений',
+        icon: 'mdi-email-edit',
+        href: '/admin/notification-templates',
+        color: 'red'
+      },
+      {
+        title: 'История уведомлений',
+        icon: 'mdi-history',
+        href: '/admin/notification-history',
+        color: 'cyan'
+      }
+    ]
+  }
+];
 </script>
 
 <template>
-  <Head title="Админ" />
+  <Head title="Админ панель" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="pa-6">
-      <VCard class="mb-6" outlined>
-        <VCardTitle class="headline">Управление</VCardTitle>
-        <VCardText>
-          <div class="d-flex flex-column gap-4 mt-4">
-            <VBtn
-              color="primary"
-              href="/news/newsList"
-              prepend-icon="mdi-format-list-bulleted"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Новости
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/news/type"
-              prepend-icon="mdi-tag"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Типы новостей
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/user"
-              prepend-icon="mdi-account-group"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Пользователи
-            </VBtn>
-          </div>
-        </VCardText>
-      </VCard>
-
-      <VCard class="mb-6" outlined>
-        <VCardTitle class="headline">Дополнительные настройки</VCardTitle>
-        <VCardText>
-          <div class="d-flex flex-column gap-4 mt-4">
-            <VBtn
-              color="secondary"
-              href="/admin/user-settings"
-              prepend-icon="mdi-account-cog"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Настройки пользователей
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/system-settings"
-              prepend-icon="mdi-cogs"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Системные настройки
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/theme-settings"
-              prepend-icon="mdi-palette"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Настройки темы
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/backup"
-              prepend-icon="mdi-backup"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Резервное копирование
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/api-settings"
-              prepend-icon="mdi-api"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Настройки API
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/logs"
-              prepend-icon="mdi-file-document"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Логи и мониторинг
-            </VBtn>
-            <VBtn
-              color="secondary"
-              href="/admin/notification-settings"
-              prepend-icon="mdi-bell-ring"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Настройки уведомлений
-            </VBtn>
-          </div>
-        </VCardText>
-      </VCard>
+    <div class="admin-dashboard">
+      <VRow>
+        <VCol
+          v-for="(section, index) in adminSections"
+          :key="index"
+          cols="12"
+          md="6"
+          lg="4"
+          xl="3"
+        >
+          <VCard class="admin-card" :color="`${section.items[0].color}-lighten-5`">
+            <VCardTitle class="admin-section-title">
+              <VIcon :icon="section.icon" class="mr-2" size="24" />
+              <span>{{ section.title }}</span>
+            </VCardTitle>
+            <VCardText class="admin-section-content">
+              <VBtn
+                v-for="(item, i) in section.items"
+                :key="i"
+                :href="item.href"
+                :color="item.color"
+                variant="tonal"
+                block
+                class="mb-3 admin-btn"
+              >
+                <VIcon :icon="item.icon" class="mr-2" />
+                <span>{{ item.title }}</span>
+              </VBtn>
+            </VCardText>
+          </VCard>
+        </VCol>
+      </VRow>
     </div>
   </AppLayout>
 </template>
 
 <style scoped>
-.pa-6 {
-  padding: 32px;
+.admin-dashboard {
+  padding: 24px;
+  background-color: #f8f9fa;
 }
 
-.d-flex {
-  display: flex;
-}
-
-.flex-column {
-  flex-direction: column;
-}
-
-.gap-4 {
-  gap: 16px;
-}
-
-.mt-4 {
-  margin-top: 16px;
-}
-
-.text-h6 {
-  font-weight: 600;
-}
-
-.mb-6 {
-  margin-bottom: 24px;
-}
-
-.v-card {
-  background-color: #f5f5f5;
+.admin-card {
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 12px;
+  border-left: 4px solid;
+  border-left-color: inherit;
 }
 
-.v-card-title {
-  background-color: #1976d2;
-  color: white;
+.admin-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.admin-section-title {
+  display: flex;
+  align-items: center;
   padding: 16px;
-  border-radius: 12px 12px 0 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  background-color: rgba(255,255,255,0.7);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
-.v-btn {
-  font-size: 16px;
-  padding: 12px;
+.admin-section-content {
+  padding: 16px;
+}
+
+.admin-btn {
+  justify-content: flex-start;
+  padding: 12px 16px;
+  text-transform: none;
+  font-size: 0.95rem;
+  letter-spacing: normal;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.admin-btn:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.v-icon {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 960px) {
+  .admin-dashboard {
+    padding: 16px;
+  }
+
+  .admin-section-title {
+    font-size: 1rem;
+    padding: 12px;
+  }
 }
 </style>

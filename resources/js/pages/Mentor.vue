@@ -2,7 +2,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { VBtn, VCard, VCardTitle, VCardText } from 'vuetify/components';
+import { VBtn, VCard, VCardTitle, VCardText, VRow, VCol, VIcon } from 'vuetify/components';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -10,196 +10,198 @@ const breadcrumbs: BreadcrumbItem[] = [
     href: '/mentor',
   },
 ];
+
+const sections = [
+  {
+    title: 'Учебный материал',
+    icon: 'mdi-book-education',
+    items: [
+      {
+        title: 'Предметы',
+        icon: 'mdi-book-open-page-variant',
+        href: '/subject',
+        color: 'deep-purple'
+      },
+      {
+        title: 'Материалы',
+        icon: 'mdi-file-document-multiple',
+        href: '/material',
+        color: 'indigo'
+      }
+    ]
+  },
+  {
+    title: 'Вопросы',
+    icon: 'mdi-help-rhombus',
+    items: [
+      {
+        title: 'Вопросы',
+        icon: 'mdi-help-box-multiple',
+        href: '/question',
+        color: 'blue'
+      },
+      {
+        title: 'Типы вопросов',
+        icon: 'mdi-shape',
+        href: '/question/type',
+        color: 'light-blue'
+      },
+      {
+        title: 'Ответы',
+        icon: 'mdi-reply-all',
+        href: '/question/correct-answer',
+        color: 'cyan'
+      },
+      {
+        title: 'Варианты ответов',
+        icon: 'mdi-format-list-checks',
+        href: '/question/option',
+        color: 'teal'
+      }
+    ]
+  },
+  {
+    title: 'Аттестация',
+    icon: 'mdi-certificate',
+    items: [
+      {
+        title: 'Аттестация',
+        icon: 'mdi-clipboard-check',
+        href: '/test',
+        color: 'green'
+      },
+      {
+        title: 'Календарь аттестаций',
+        icon: 'mdi-calendar-check',
+        href: '/calendar',
+        color: 'light-green'
+      },
+      {
+        title: 'Типы аттестации',
+        icon: 'mdi-shape-outline',
+        href: '/test/type',
+        color: 'lime'
+      },
+      {
+        title: 'Результаты',
+        icon: 'mdi-chart-bar',
+        href: '/test/answer',
+        color: 'amber'
+      },
+      {
+        title: 'Попытки',
+        icon: 'mdi-repeat',
+        href: '/test/attempt',
+        color: 'orange'
+      }
+    ]
+  },
+  {
+    title: 'Остальное',
+    icon: 'mdi-dots-hexagon',
+    items: [
+      {
+        title: 'Статусы',
+        icon: 'mdi-format-list-bulleted',
+        href: '/status',
+        color: 'deep-orange'
+      },
+      {
+        title: 'События',
+        icon: 'mdi-calendar-clock',
+        href: '/event',
+        color: 'brown'
+      }
+    ]
+  }
+];
 </script>
 
 <template>
   <Head title="Наставник" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="pa-6">
-      <VCard class="mb-6" outlined>
-        <VCardTitle class="headline">Учебный материал</VCardTitle>
-        <VCardText>
-          <div class="d-flex flex-column gap-4 mt-4">
-            <VBtn
-              color="primary"
-              href="/subject"
-              prepend-icon="mdi-book-open-page-variant"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Предметы
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/material"
-              prepend-icon="mdi-file-document-multiple"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Материалы
-            </VBtn>
-          </div>
-        </VCardText>
-      </VCard>
-
-      <VCard class="mb-6" outlined>
-        <VCardTitle class="headline">Вопросы</VCardTitle>
-        <VCardText>
-          <div class="d-flex flex-column gap-4 mt-4">
-            <VBtn
-              color="primary"
-              href="/question"
-              prepend-icon="mdi-help-box-multiple"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Вопросы
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/question/type"
-              prepend-icon="mdi-shape"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Типы вопросов
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="question/correct-answer"
-              prepend-icon="mdi-reply-all"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Ответы
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="question/option"
-              prepend-icon="mdi-reply-all"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Варианты ответов
-            </VBtn>
-          </div>
-        </VCardText>
-      </VCard>
-
-      <VCard class="mb-6" outlined>
-        <VCardTitle class="headline">Аттестация</VCardTitle>
-        <VCardText>
-          <div class="d-flex flex-column gap-4 mt-4">
-            <VBtn
-              color="primary"
-              href="/test"
-              prepend-icon="mdi-clipboard-check"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Аттестация
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/calendar"
-              prepend-icon="mdi-calendar-check"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Календарь аттестаций
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/test/type"
-              prepend-icon="mdi-shape-outline"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Типы аттестации
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/test/answer"
-              prepend-icon="mdi-chart-bar"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Результаты
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/test/attempt"
-              prepend-icon="mdi-repeat"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Попытки
-            </VBtn>
-          </div>
-        </VCardText>
-      </VCard>
-
-      <VCard class="mb-6" outlined>
-        <VCardTitle class="headline">Остальное</VCardTitle>
-        <VCardText>
-          <div class="d-flex flex-column gap-4 mt-4">
-            <VBtn
-              color="primary"
-              href="/status"
-              prepend-icon="mdi-format-list-bulleted"
-              class="d-flex justify-start align-center text-h6"
-            >
-              Статусы
-            </VBtn>
-            <VBtn
-              color="primary"
-              href="/event"
-              prepend-icon="mdi-calendar-clock"
-              class="d-flex justify-start align-center text-h6"
-            >
-              События
-            </VBtn>
-          </div>
-        </VCardText>
-      </VCard>
+    <div class="dashboard-container">
+      <VRow>
+        <VCol
+          v-for="(section, index) in sections"
+          :key="index"
+          cols="12"
+          sm="6"
+          md="4"
+          lg="3"
+        >
+          <VCard class="section-card" :color="`${section.items[0].color}-lighten-5`">
+            <VCardTitle class="section-title">
+              <VIcon :icon="section.icon" class="mr-2" />
+              {{ section.title }}
+            </VCardTitle>
+            <VCardText class="section-content">
+              <VBtn
+                v-for="(item, i) in section.items"
+                :key="i"
+                :href="item.href"
+                :color="item.color"
+                variant="tonal"
+                block
+                class="mb-2 action-btn"
+              >
+                <VIcon :icon="item.icon" class="mr-2" />
+                {{ item.title }}
+              </VBtn>
+            </VCardText>
+          </VCard>
+        </VCol>
+      </VRow>
     </div>
   </AppLayout>
 </template>
 
-
 <style scoped>
-.pa-6 {
-  padding: 32px;
+.dashboard-container {
+  padding: 24px;
 }
 
-.d-flex {
-  display: flex;
-}
-
-.flex-column {
-  flex-direction: column;
-}
-
-.gap-4 {
-  gap: 16px;
-}
-
-.mt-4 {
-  margin-top: 16px;
-}
-
-.text-h6 {
-  font-weight: 600;
-}
-
-.mb-6 {
-  margin-bottom: 24px;
-}
-
-.v-card {
-  background-color: #f5f5f5;
+.section-card {
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 12px;
 }
 
-.v-card-title {
-  background-color: #1976d2;
-  color: white;
-  padding: 16px;
-  border-radius: 12px 12px 0 0;
+.section-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-.v-btn {
-  font-size: 16px;
-  padding: 12px;
+.section-title {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #424242;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.section-content {
+  padding: 16px;
+}
+
+.action-btn {
+  justify-content: flex-start;
+  padding: 12px 16px;
+  text-transform: none;
+  font-size: 0.95rem;
+  letter-spacing: normal;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  transform: translateX(5px);
+}
+
+.v-icon {
+  font-size: 1.25rem;
 }
 </style>
