@@ -28,6 +28,7 @@ const form = useForm({
 
 const timeLeft = ref(props.test.time_limit * 60);
 let timerInterval: number | null = null;
+const isSubmitted = ref(false);
 
 const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -36,16 +37,14 @@ const formatTime = (seconds: number): string => {
 };
 
 const submit = () => {
-    if (!form.processing) {
-        const confirmed = window.confirm('Точно ли вы хотите завершить тест?');
-        if (confirmed) {
-            form.post(route('attestation.submit', props.test.id));
-        }
+    if (!form.processing && !isSubmitted.value) {
+        isSubmitted.value = true;
+        form.post(route('attestation.submit', props.test.id));
     }
 };
 
 const handleVisibilityChange = () => {
-    if (document.hidden) {
+    if (document.hidden && !isSubmitted.value) {
         clearInterval(timerInterval!);
         submit();
     }

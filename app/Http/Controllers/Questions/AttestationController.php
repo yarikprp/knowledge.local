@@ -33,7 +33,7 @@ class AttestationController extends Controller
     }
 
 
-    public function submit(Request $request, Test $test)
+   public function submit(Request $request, Test $test)
     {
         $data = $request->validate([
             'answers' => 'required|array',
@@ -42,7 +42,32 @@ class AttestationController extends Controller
             'answers.*.text' => 'nullable|string',
         ]);
 
+        $correctAnswers = 0;
+        $totalQuestions = $test->questions()->count();
 
-        return redirect()->route('dashboard')->with('success', 'Результаты отправлены!');
+        foreach ($data['answers'] as $answer) {
+            $question = $test->questions()->find($answer['question_id']);
+
+            if ($question && $answer['selected_option_id']) {
+                $correctOption = $question->options()->where('is_correct', true)->first();
+                if ($correctOption && $correctOption->id == $answer['selected_option_id']) {
+                    $correctAnswers++;
+                }
+            }
+        }
+
+        $percentage = $totalQuestions ? round(($correctAnswers / $totalQuestions) * 100) : 0;
+        $isPassed = $percentage >= 60;
+
+        $result = \App\Models\Result::create([
+            'user_id' => auth()->id(),
+            'test_id' => $test->id,
+            'score' => $correctAnswers,
+            'percentage' => $percentage,
+            'is_passed' => $isPassed,
+            'attempted_at' => now(),
+        ]);
+
+        return redirect()->route('results.show', $result->id);
     }
 }

@@ -83,7 +83,7 @@ const sections = [
         color: 'lime'
       },
       {
-        title: 'Результаты',
+        title: 'Ответы пользователя',
         icon: 'mdi-chart-bar',
         href: '/test/answer',
         color: 'amber'
@@ -92,6 +92,12 @@ const sections = [
         title: 'Попытки',
         icon: 'mdi-repeat',
         href: '/test/attempt',
+        color: 'orange'
+      },
+      {
+        title: 'Результаты',
+        icon: 'mdi-repeat',
+        href: '/test/result',
         color: 'orange'
       }
     ]
@@ -178,7 +184,7 @@ const sections = [
   align-items: center;
   padding: 16px;
   font-size: 1.25rem;
-  font-weight: 500;
+  font-weight: 700;
   color: #424242;
   border-bottom: 1px solid rgba(0,0,0,0.1);
 }

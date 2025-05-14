@@ -158,7 +158,6 @@ const adminSections = [
 <style scoped>
 .admin-dashboard {
   padding: 24px;
-  background-color: #f8f9fa;
 }
 
 .admin-card {

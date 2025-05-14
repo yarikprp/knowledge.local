@@ -6,11 +6,13 @@ interface OptionProps {
     id: number;
     text: string;
     question_id: number;
+    is_correct: boolean;
 }
 
 interface OptionForm {
     text: string;
     question_id: number | null;
+    is_correct: boolean;
 }
 
 const props = defineProps<{
@@ -26,17 +28,22 @@ const dialog = ref(props.modelValue);
 const form = useForm<OptionForm>({
     text: '',
     question_id: null,
+    is_correct: false,
 });
 
-watch(() => props.modelValue, (value) => {
-    dialog.value = value;
-    if (value && props.OptionItem) {
-        form.text = props.OptionItem.text;
-        form.question_id = props.OptionItem.question_id;
-    } else {
-        form.reset();
-    }
-});
+watch(
+    () => props.modelValue,
+    (value) => {
+        dialog.value = value;
+        if (value && props.OptionItem) {
+            form.text = props.OptionItem.text;
+            form.question_id = props.OptionItem.question_id;
+            form.is_correct = props.OptionItem.is_correct;
+        } else {
+            form.reset();
+        }
+    },
+);
 
 watch(dialog, (value) => emit('update:modelValue', value));
 
@@ -79,6 +86,8 @@ const submit = () => {
                     :error-messages="form.errors.question_id"
                     required
                 />
+
+                <v-checkbox v-model="form.is_correct" label="Правильный вариант" :error-messages="form.errors.is_correct" />
             </v-card-text>
             <v-card-actions>
                 <v-spacer />

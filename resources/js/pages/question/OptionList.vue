@@ -34,6 +34,11 @@
                                 />
                             </template>
 
+                            <template v-slot:[`item.is_correct`]="{ item }">
+                                <v-icon v-if="(item as Item).is_correct">mdi-check-circle</v-icon>
+                                <v-icon v-else>mdi-circle-outline</v-icon>
+                            </template>
+
                             <template #loading>
                                 <v-skeleton-loader v-for="n in 5" :key="n" type="table-row" class="mx-2" />
                             </template>
@@ -42,7 +47,7 @@
                 </v-expansion-panel>
             </v-expansion-panels>
 
-            <div v-else class="text-center py-4">
+            <div v-else class="py-4 text-center">
                 <p>Вариантов ответов нет</p>
             </div>
 
@@ -68,6 +73,7 @@ interface Options {
         id: number;
         name: string;
     };
+    is_correct: boolean;
 }
 
 const props = defineProps<{
@@ -84,25 +90,26 @@ const headers = ref([
     { title: 'Действия', key: 'actions', sortable: false },
     { title: '#', key: 'id' },
     { title: 'Текст варианта', key: 'text' },
+    { title: 'Правильность', key: 'is_correct' },
 ]);
 
 const groupedOptions = computed(() => {
-    const groups = new Map<number, { question: { id: number; name: string }, options: Options[] }>();
+    const groups = new Map<number, { question: { id: number; name: string }; options: Options[] }>();
 
-    props.questions.forEach(question => {
+    props.questions.forEach((question) => {
         groups.set(question.id, {
             question: { id: question.id, name: question.name },
-            options: []
+            options: [],
         });
     });
 
-    props.options.forEach(option => {
+    props.options.forEach((option) => {
         if (groups.has(option.question_id)) {
             groups.get(option.question_id)!.options.push(option);
         } else {
             groups.set(option.question_id, {
                 question: option.question,
-                options: [option]
+                options: [option],
             });
         }
     });

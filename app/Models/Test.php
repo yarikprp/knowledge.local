@@ -9,6 +9,7 @@ use App\Models\QuestionType;
 use App\Models\Calendar;
 use App\Models\Attempt;
 use App\Models\Question;
+use App\Models\results;
 
 class Test extends Model
 {
@@ -49,5 +50,10 @@ class Test extends Model
     public function questions()
     {
         return $this->hasMany(Question::class);
+    }
+
+    public function results()
+    {
+        return $this->hasMany(Result::class);
     }
 }

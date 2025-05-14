@@ -31,6 +31,7 @@ class QuestionOptionController extends Controller
         $validated = $request->validate([
             'question_id' => 'required|exists:questions,id',
             'text' => 'required|string',
+            'is_correct' => 'required|boolean',
         ]);
 
         QuestionOption::create($validated);
@@ -44,6 +45,7 @@ class QuestionOptionController extends Controller
         $validated = $request->validate([
             'question_id' => 'required|exists:questions,id',
             'text' => 'required|string',
+            'is_correct' => 'required|boolean',
         ]);
 
         $questionOption->update($validated);

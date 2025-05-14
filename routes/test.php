@@ -4,6 +4,7 @@ use App\Http\Controllers\Test\TestTypeController;
 use App\Http\Controllers\Test\TestController;
 use App\Http\Controllers\Test\AttemptController;
 use App\Http\Controllers\Test\AnswerController;
+use App\Http\Controllers\Test\ResultController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -11,6 +12,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/test/type', fn () => redirect('/test/type/index'));
     Route::get('/test/answer', fn () => redirect('/test/answer/index'));
     Route::get('/test/attempt', fn () => redirect('/test/attempt/index'));
+    Route::get('/test/result', fn () => redirect('/test/result/index'));
 
     // --- Test ---
     Route::prefix('test')->name('test.')->group(function () {
@@ -44,6 +46,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [AnswerController::class, 'store'])->name('store');
         Route::put('/{answer}', [AnswerController::class, 'update'])->name('update');
         Route::delete('/{answer}', [AnswerController::class, 'destroy'])->name('destroy');
+    });
+
+    // --- Answer ---
+    Route::prefix('/test/result')->name('result.')->group(function () {
+        Route::get('/', [ResultController::class, 'index'])->name('index');
+        Route::get('/{result}', [ResultController::class, 'show'])->name('show');
     });
 });
 
