@@ -12,19 +12,39 @@
                 @back="goBack"
             />
 
-            <VDataTable :headers="headers" :items="correctAnswers" :search="search" item-value="id" no-data-text="Ответов нет" :loading="isLoading">
-                <template v-slot:[`item.actions`]="{ item }">
-                    <ActionMenu
-                        :buttons="{ isEdit: true, isDelete: true, isGoToView: false }"
-                        @edit="updateItem(item as CorrectAnswer)"
-                        @delete="deleteItem(item as CorrectAnswer)"
-                    />
-                </template>
+            <v-expansion-panels v-if="groupedAnswers.size > 0">
+                <v-expansion-panel v-for="[questionId, questionData] in groupedAnswers" :key="questionId">
+                    <v-expansion-panel-title>
+                        {{ questionData.question.name }} ({{ questionData.answers.length }} ответов)
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                        <VDataTable
+                            :headers="headers"
+                            :items="questionData.answers"
+                            :search="search"
+                            item-value="id"
+                            no-data-text="Ответов нет"
+                            :loading="isLoading"
+                        >
+                            <template v-slot:[`item.actions`]="{ item }">
+                                <ActionMenu
+                                    :buttons="{ isEdit: true, isDelete: true, isGoToView: false }"
+                                    @edit="updateItem(item as CorrectAnswer)"
+                                    @delete="deleteItem(item as CorrectAnswer)"
+                                />
+                            </template>
 
-                <template #loading>
-                    <v-skeleton-loader v-for="n in 5" :key="n" type="table-row" class="mx-2" />
-                </template>
-            </VDataTable>
+                            <template #loading>
+                                <v-skeleton-loader v-for="n in 5" :key="n" type="table-row" class="mx-2" />
+                            </template>
+                        </VDataTable>
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+            </v-expansion-panels>
+
+            <div v-else class="text-center py-4">
+                <p>Ответов нет</p>
+            </div>
 
             <QuestionCorrectAnswerModal v-model="dialog" :AnswerItem="selected" :questions="props.questions" @saved="refreshItems" />
         </div>
@@ -38,12 +58,14 @@ import QuestionCorrectAnswerModal from '@/components/Modal/Question/QuestionCorr
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Head, router } from '@inertiajs/vue3';
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, computed } from 'vue';
 
 interface CorrectAnswer {
     id: number;
     text: string;
+    question_id: number;
     question: {
+        id: number;
         name: string;
     };
 }
@@ -61,19 +83,32 @@ const isLoading = ref(false);
 const headers = ref([
     { title: 'Действия', key: 'actions', sortable: false },
     { title: '#', key: 'id' },
-    { title: 'Заголовок', key: 'text' },
-    { title: 'Вопрос', key: 'question.name' },
+    { title: 'Ответ', key: 'text' },
 ]);
 
-interface CorrectAnswer {
-    id: number;
-    text: string;
-    question_id: number;
-    questions: {
-        id: number;
-        name: string;
-    };
-}
+const groupedAnswers = computed(() => {
+    const groups = new Map<number, { question: { id: number; name: string }, answers: CorrectAnswer[] }>();
+
+    props.questions.forEach(question => {
+        groups.set(question.id, {
+            question: { id: question.id, name: question.name },
+            answers: []
+        });
+    });
+
+    props.correctAnswers.forEach(answer => {
+        if (groups.has(answer.question_id)) {
+            groups.get(answer.question_id)!.answers.push(answer);
+        } else {
+            groups.set(answer.question_id, {
+                question: answer.question,
+                answers: [answer]
+            });
+        }
+    });
+
+    return groups;
+});
 
 const refreshItems = () => {
     isLoading.value = true;
@@ -96,7 +131,7 @@ const updateItem = (item: CorrectAnswer) => {
 };
 
 const deleteItem = (item: CorrectAnswer) => {
-    if (confirm(`Удалить ответа "${item.text}"?`)) {
+    if (confirm(`Удалить ответ "${item.text}"?`)) {
         Inertia.delete(`/question/correct-answer/${item.id}`, {
             onSuccess: () => {
                 alert('Ответ успешно удален.');

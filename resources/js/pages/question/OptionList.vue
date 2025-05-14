@@ -12,19 +12,39 @@
                 @back="goBack"
             />
 
-            <VDataTable :headers="headers" :items="options" :search="search" item-value="id" no-data-text="Ответов нет" :loading="isLoading">
-                <template v-slot:[`item.actions`]="{ item }">
-                    <ActionMenu
-                        :buttons="{ isEdit: true, isDelete: true, isGoToView: false }"
-                        @edit="updateItem(item as Options)"
-                        @delete="deleteItem(item as Options)"
-                    />
-                </template>
+            <v-expansion-panels v-if="groupedOptions.size > 0">
+                <v-expansion-panel v-for="[questionId, questionData] in groupedOptions" :key="questionId">
+                    <v-expansion-panel-title>
+                        {{ questionData.question.name }} ({{ questionData.options.length }} вариантов)
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                        <VDataTable
+                            :headers="headers"
+                            :items="questionData.options"
+                            :search="search"
+                            item-value="id"
+                            no-data-text="Вариантов нет"
+                            :loading="isLoading"
+                        >
+                            <template v-slot:[`item.actions`]="{ item }">
+                                <ActionMenu
+                                    :buttons="{ isEdit: true, isDelete: true, isGoToView: false }"
+                                    @edit="updateItem(item as Options)"
+                                    @delete="deleteItem(item as Options)"
+                                />
+                            </template>
 
-                <template #loading>
-                    <v-skeleton-loader v-for="n in 5" :key="n" type="table-row" class="mx-2" />
-                </template>
-            </VDataTable>
+                            <template #loading>
+                                <v-skeleton-loader v-for="n in 5" :key="n" type="table-row" class="mx-2" />
+                            </template>
+                        </VDataTable>
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+            </v-expansion-panels>
+
+            <div v-else class="text-center py-4">
+                <p>Вариантов ответов нет</p>
+            </div>
 
             <OptionModal v-model="dialog" :OptionItem="selected" :questions="props.questions" @saved="refreshItems" />
         </div>
@@ -38,12 +58,14 @@ import OptionModal from '@/components/Modal/Question/OptionModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Head, router } from '@inertiajs/vue3';
-import { defineProps, ref } from 'vue';
+import { computed, defineProps, ref } from 'vue';
 
 interface Options {
     id: number;
     text: string;
+    question_id: number;
     question: {
+        id: number;
         name: string;
     };
 }
@@ -61,19 +83,32 @@ const isLoading = ref(false);
 const headers = ref([
     { title: 'Действия', key: 'actions', sortable: false },
     { title: '#', key: 'id' },
-    { title: 'Заголовок', key: 'text' },
-    { title: 'Вопрос', key: 'question.name' },
+    { title: 'Текст варианта', key: 'text' },
 ]);
 
-interface Options {
-    id: number;
-    text: string;
-    question_id: number;
-    questions: {
-        id: number;
-        name: string;
-    };
-}
+const groupedOptions = computed(() => {
+    const groups = new Map<number, { question: { id: number; name: string }, options: Options[] }>();
+
+    props.questions.forEach(question => {
+        groups.set(question.id, {
+            question: { id: question.id, name: question.name },
+            options: []
+        });
+    });
+
+    props.options.forEach(option => {
+        if (groups.has(option.question_id)) {
+            groups.get(option.question_id)!.options.push(option);
+        } else {
+            groups.set(option.question_id, {
+                question: option.question,
+                options: [option]
+            });
+        }
+    });
+
+    return groups;
+});
 
 const refreshItems = () => {
     isLoading.value = true;
@@ -103,7 +138,7 @@ const deleteItem = (item: Options) => {
                 refreshItems();
             },
             onError: () => {
-                alert('Ошибка при вариант ответа.');
+                alert('Ошибка при удалении варианта ответа.');
             },
         });
     }
