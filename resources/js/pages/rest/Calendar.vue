@@ -4,7 +4,7 @@
     <AppLayout :breadcrumbs="[{ title: 'Календарь аттестаций', href: '/test-calendar' }]">
         <div class="pa-6">
             <VCard class="mb-6">
-                <VCardTitle class="d-flex align-center">
+                <v-toolbar>
                     <v-btn icon @click="goBack">
                         <v-icon>mdi-arrow-left</v-icon>
                     </v-btn>
@@ -16,7 +16,7 @@
                         <v-icon left>mdi-plus</v-icon>
                         Добавить
                     </VBtn>
-                </VCardTitle>
+                </v-toolbar>
                 <VCardText>
                     <VCalendar color="primary" type="month" :events="calendarEvents" @click:event="handleEventClick">
                         <template #day="{ date }">
