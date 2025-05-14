@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Test\TestTypeController;
 use App\Http\Controllers\Test\TestController;
+use App\Http\Controllers\Questions\AttestationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -38,6 +39,12 @@ Route::get('test-calendar', function () {
 Route::get('test/list', [TestController::class, 'list'])
     ->middleware(['auth', 'verified'])
     ->name('test');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/attestation/{test}', [AttestationController::class, 'show'])->name('attestation.show');
+    Route::post('/attestation/{test}/submit', [AttestationController::class, 'submit'])->name('attestation.submit');
+});
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/news.php';
