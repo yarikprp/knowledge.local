@@ -28,15 +28,15 @@ interface CalendarForm {
 
 const props = defineProps<{
     modelValue: boolean;
-    CalendarFormFormFormItem?: CalendarItemProps | null;
+    calendarItem?: CalendarItemProps | null;
     events: Option[];
     users: Option[];
     tests: Option[];
 }>();
 
 const emit = defineEmits(['update:modelValue', 'saved']);
-const isLoading = ref(false);
 const dialog = ref(props.modelValue);
+const isLoading = ref(false);
 
 const form = useForm<CalendarForm>({
     event_date: '',
@@ -51,8 +51,9 @@ watch(
     () => props.modelValue,
     (value) => {
         dialog.value = value;
-        if (value && props.CalendarFormFormFormItem) {
-            const item = props.CalendarFormFormFormItem;
+
+        if (value && props.calendarItem) {
+            const item = props.calendarItem;
             form.event_date = item.event_date;
             form.notes = item.notes;
             form.is_notified = item.is_notified;
@@ -66,6 +67,8 @@ watch(
 );
 
 watch(dialog, (value) => emit('update:modelValue', value));
+
+const menuDate = ref(false);
 
 function formatDate(date: string | Date | null): string {
     if (!date) return '';
@@ -82,8 +85,6 @@ function parseDate(input: string): string {
     if (!day || !month || !year) return '';
     return `${year}-${month}-${day}`;
 }
-
-const menuDate = ref(false);
 
 const formattedDate = computed<string>({
     get: () => form.event_date ? formatDate(form.event_date) : '',
@@ -109,33 +110,31 @@ const hasErrors = computed(() => Object.keys(validationErrors.value).length > 0)
 
 const submit = () => {
     if (hasErrors.value) {
-        form.errors = validationErrors.value as any;
+        form.setError(validationErrors.value as Record<string, string>);
         return;
     }
 
     isLoading.value = true;
 
-    if (props.CalendarFormFormFormItem?.id) {
-        form.put(route('calendar.update', props.CalendarFormFormFormItem.id), {
-            onSuccess: () => {
-                emit('saved');
-                dialog.value = false;
-                isLoading.value = false;
-            },
-            onError: () => {
-                isLoading.value = false;
-            },
+    const successCallback = () => {
+        emit('saved');
+        dialog.value = false;
+        isLoading.value = false;
+    };
+
+    const errorCallback = () => {
+        isLoading.value = false;
+    };
+
+    if (props.calendarItem?.id) {
+        form.put(route('calendar.update', props.calendarItem.id), {
+            onSuccess: successCallback,
+            onError: errorCallback,
         });
     } else {
         form.post(route('calendar.store'), {
-            onSuccess: () => {
-                emit('saved');
-                dialog.value = false;
-                isLoading.value = false;
-            },
-            onError: () => {
-                isLoading.value = false;
-            },
+            onSuccess: successCallback,
+            onError: errorCallback,
         });
     }
 };
@@ -145,10 +144,11 @@ const submit = () => {
     <v-dialog v-model="dialog" max-width="600px" persistent>
         <v-card>
             <v-card-title>
-                {{ CalendarFormFormFormItem ? 'Редактировать событие' : 'Добавить событие' }}
+                {{ props.calendarItem ? 'Редактировать событие' : 'Добавить событие' }}
             </v-card-title>
 
             <v-card-text>
+                <!-- Date -->
                 <v-menu v-model="menuDate" :close-on-content-click="false" transition="scale-transition" offset-y max-width="290px" min-width="290px">
                     <template #activator="{ props: menuProps }">
                         <v-text-field
@@ -164,11 +164,19 @@ const submit = () => {
                     <v-date-picker v-model="form.event_date" @update:model-value="menuDate = false" color="primary" elevation="0" />
                 </v-menu>
 
-                <v-text-field v-model="form.notes" label="Примечание" :error-messages="form.errors.notes" :disabled="isLoading" required />
+                <!-- Notes -->
+                <v-text-field
+                    v-model="form.notes"
+                    label="Примечание"
+                    :error-messages="form.errors.notes"
+                    :disabled="isLoading"
+                    required
+                />
 
+                <!-- Event Type -->
                 <v-select
                     v-model="form.event_type_id"
-                    :items="props.events"
+                    :items="events"
                     item-title="name"
                     item-value="id"
                     label="Тип события"
@@ -177,9 +185,10 @@ const submit = () => {
                     required
                 />
 
+                <!-- User -->
                 <v-select
                     v-model="form.user_id"
-                    :items="props.users"
+                    :items="users"
                     item-title="name"
                     item-value="id"
                     label="Пользователь"
@@ -188,9 +197,10 @@ const submit = () => {
                     required
                 />
 
+                <!-- Testing (optional) -->
                 <v-select
                     v-model="form.testing_id"
-                    :items="props.tests"
+                    :items="tests"
                     item-title="name"
                     item-value="id"
                     label="Аттестация"
@@ -202,8 +212,10 @@ const submit = () => {
 
             <v-card-actions>
                 <v-spacer />
-                <v-btn :disabled="isLoading" text color="grey" @click="dialog = false">Отмена</v-btn>
-                <v-btn :loading="form.processing" :disabled="isLoading" color="primary" @click="submit">Сохранить</v-btn>
+                <v-btn text color="grey" :disabled="isLoading" @click="dialog = false">Отмена</v-btn>
+                <v-btn :loading="form.processing" :disabled="isLoading" color="primary" @click="submit">
+                    Сохранить
+                </v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

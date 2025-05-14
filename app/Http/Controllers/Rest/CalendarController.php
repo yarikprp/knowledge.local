@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class CalendarController extends Controller
 {
@@ -103,6 +105,53 @@ class CalendarController extends Controller
             ]);
         } catch (\Exception $e) {
             \Log::error('Ошибка отправки Telegram: ' . $e->getMessage());
+        }
+    }
+
+    public function sendToTelegram($id)
+    {
+        $calendar = Calendar::with(['user', 'eventType', 'testing'])->findOrFail($id);
+
+        $eventType = $calendar->eventType->name ?? 'Неизвестно';
+        $user = $calendar->user->name ?? 'Неизвестный';
+        $date = \Carbon\Carbon::parse($calendar->event_date)->locale('ru')->isoFormat('D MMMM YYYY');
+        $notes = $calendar->notes ?? 'Без заметок';
+        $testName = $calendar->testing->name ?? 'Тест не указан';
+
+        $orderNumber = now()->format('Y') . '-' . random_int(10000, 99999);
+
+        $pdf = Pdf::loadView('pdf.calendar_event', [
+                'user' => $user,
+                'eventType' => $eventType,
+                'date' => $date,
+                'notes' => $notes,
+                'testName' => $testName,
+                'orderNumber' => $orderNumber,
+            ])
+            ->setOption('defaultFont', 'DejaVu Sans')
+            ->setOption('isRemoteEnabled', true)
+            ->setPaper('a4')
+            ->setWarnings(false);
+
+        $pdfFilename = "Приказ_{$orderNumber}.pdf";
+        $pdfPath = 'calendar_orders/' . $pdfFilename;
+
+        Storage::disk('local')->put($pdfPath, $pdf->output());
+
+        try {
+            $token = env('TELEGRAM_BOT_TOKEN');
+            $chat_id = env('TELEGRAM_CHAT_ID');
+
+            $response = Http::attach(
+                'document',
+                Storage::disk('local')->get($pdfPath),
+                $pdfFilename
+            )->post("https://api.telegram.org/bot{$token}/sendDocument", [
+                'chat_id' => $chat_id,
+                'caption' => "📄 Приказ №{$orderNumber}\n👤 {$user}\n🧪 {$eventType}\n🕒 {$date}",
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

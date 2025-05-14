@@ -55,6 +55,10 @@
                         <VBtn color="grey" @click="isDialogVisible = false">Закрыть</VBtn>
                         <VBtn color="blue" @click="openEditDialog(selectedEvent)">Редактировать</VBtn>
                         <VBtn color="red" @click="deleteEvent(selectedEvent.id)">Удалить</VBtn>
+                        <VBtn color="green" @click="sendToTelegram(selectedEvent!.id)">
+                            <v-icon left>mdi-send</v-icon>
+                            В Telegram
+                        </VBtn>
                     </VCardActions>
                 </VCard>
             </VDialog>
@@ -190,6 +194,17 @@ function deleteEvent(id: number) {
 
 function reloadEvents() {
     router.reload({ only: ['calendars'] });
+}
+
+function sendToTelegram(id: number) {
+    router.post(route('calendar.sendToTelegram', id), {}, {
+        onSuccess: () => {
+            alert('PDF отправлен в Telegram!');
+        },
+        onError: () => {
+            alert('Произошла ошибка при отправке PDF в Telegram.');
+        },
+    });
 }
 
 const goBack = () => {

@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('calendar')->name('calendar.')->group(function () {
         Route::get('/', [CalendarController::class, 'index'])->name('index');
         Route::post('/', [CalendarController::class, 'store'])->name('store');
+        Route::post('/{id}/send-to-telegram', [CalendarController::class, 'sendToTelegram'])
+            ->name('sendToTelegram');
         Route::put('/{calendar}', [CalendarController::class, 'update'])->name('update');
         Route::delete('/{calendar}', [CalendarController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/mark-as-notified', [CalendarController::class, 'markAsNotified'])->name('markAsNotified');
