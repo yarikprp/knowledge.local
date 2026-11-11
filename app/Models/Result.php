@@ -19,6 +19,7 @@ class Result extends Model
         'passed',
         'attempted_at',
         'attempt_number',
+        'duration',
     ];
 
     public function user()
