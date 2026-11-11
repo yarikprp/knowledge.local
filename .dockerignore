@@ -1,0 +1,15 @@
+.git
+.github
+.osp
+node_modules
+npm-debug.log
+vendor
+storage/*.key
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+database/*.sqlite
+database/*.sqlite-journal
+tests
+.phpunit.result.cache
